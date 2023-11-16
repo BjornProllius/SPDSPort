@@ -9,17 +9,16 @@
  * <p>Contributors: Johannes Spaeth - initial API and implementation
  * *****************************************************************************
  */
-package boomerang.arrays;
+package boomerang.arrays
 
-import boomerang.scene.ControlFlowGraph.Edge;
-import boomerang.scene.Pair;
-import boomerang.scene.Val;
-import java.util.Set;
-import wpds.impl.Weight;
-import wpds.interfaces.State;
+import boomerang.scene.{ControlFlowGraph, Pair, Val}
+import wpds.impl.Weight
+import wpds.interfaces.State
+import scala.collection.Set
 
-public interface ArrayHandlingStrategy<W extends Weight> {
-  void handleForward(Edge arrayStoreStmt, Pair<Val, Integer> arrayBase, Set<State> out);
+class IgnoreArrayStrategy[W <: Weight] extends ArrayHandlingStrategy[W] {
 
-  void handleBackward(Edge arrayStoreStmt, Pair<Val, Integer> arrayBase, Set<State> out);
+  override def handleForward(storeStmt: ControlFlowGraph.Edge, storedVal: Pair[Val, Int], out: Set[State]): Unit = {}
+
+  override def handleBackward(curr: ControlFlowGraph.Edge, arrayBase: Pair[Val, Int], out: Set[State]): Unit = {}
 }

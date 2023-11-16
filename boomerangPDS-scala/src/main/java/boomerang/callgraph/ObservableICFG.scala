@@ -1,7 +1,6 @@
-package boomerang.callgraph;
+package boomerang.callgraph
 
-import boomerang.scene.CallGraph.Edge;
-import java.util.Collection;
+import boomerang.scene.CallGraph.Edge
 
 /**
  * An interprocedural control-flow graph, for which caller-callee edges can be observed using {@link
@@ -11,42 +10,41 @@ import java.util.Collection;
  * @param <M> Method representation
  * @author Melanie Bruns on 04.05.2018
  */
-public interface ObservableICFG<N, M> {
+
+trait ObservableICFG[N, M] {
   /** Registers a listener that will be notified whenever a callee is added */
-  void addCalleeListener(CalleeListener<N, M> listener);
-
+  def addCalleeListener(listener: CalleeListener[N, M]): Unit
   /** Registers a listener that will be notified whenever a caller is added. */
-  void addCallerListener(CallerListener<N, M> listener);
-
+  def addCallerListener(listener: CallerListener[N, M]): Unit
   /** Returns <code>true</code> if the given statement is a call site. */
-  boolean isCallStmt(N stmt);
+  def isCallStmt(stmt: N): Boolean
 
   /**
    * Returns <code>true</code> if the given statement leads to a method return (exceptional or not).
    * For backward analyses may also be start statements.
    */
-  boolean isExitStmt(N stmt);
+  def isExitStmt(stmt: N): Boolean
 
   /**
    * Returns true is this is a method's start statement. For backward analyses those may also be
    * return or throws statements.
    */
-  boolean isStartPoint(N stmt);
+  def isStartPoint(stmt: N): Boolean
 
-  int getNumberOfEdgesTakenFromPrecomputedGraph();
+  def getNumberOfEdgesTakenFromPrecomputedGraph(): Int
 
   /**
    * Resets the call graph. Only affects the call graph if it was built demand-driven, otherwise
    * graph will remain unchanged. Demand-driven call graph will keep intraprocedual information, but
    * reset start with an empty call graph again.
    */
-  void resetCallGraph();
+  def resetCallGraph(): Unit
 
-  Collection<N> getStartPointsOf(M callee);
+  def getStartPointsOf(callee: M): Collection[N]
 
-  Collection<N> getEndPointsOf(M flowReaches);
+  def getEndPointsOf(flowReaches: M): Collection[N]
 
-  void computeFallback();
+  def computeFallback(): Unit
 
-  void addEdges(Edge e);
+  def addEdges(e: Edge): Unit
 }
