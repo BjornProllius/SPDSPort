@@ -70,6 +70,7 @@ public abstract class SyncPDSSolver<
           return "Field " + SyncPDSSolver.this.toString();
         };
       };
+      
   private final Set<Node<Stmt, Fact>> reachedStates = Sets.newHashSet();
   private final Set<Node<Stmt, Fact>> callingContextReachable = Sets.newHashSet();
   private final Set<Node<Stmt, Fact>> fieldContextReachable = Sets.newHashSet();
