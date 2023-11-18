@@ -1,0 +1,1 @@
+addSbtPlugin("com.github.scalagen" % "sbt-scalagen" % "0.4.2")
