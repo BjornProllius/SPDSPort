@@ -9,10 +9,9 @@
  * <p>Contributors: Johannes Spaeth - initial API and implementation
  * *****************************************************************************
  */
-package wpds.debug;
+package wpds.debug
 
-import wpds.impl.Weight;
-import wpds.interfaces.Location;
-import wpds.interfaces.State;
+import wpds.impl.Weight
+import wpds.interfaces.{Location, State}
 
-public interface Debugger<N extends Location, D extends State, W extends Weight> {}
+trait Debugger[N <: Location, D <: State, W <: Weight]

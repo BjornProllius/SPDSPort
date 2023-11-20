@@ -9,6 +9,6 @@
  * <p>Contributors: Johannes Spaeth - initial API and implementation
  * *****************************************************************************
  */
-package wpds.interfaces;
+package wpds.interfaces
 
-public interface Empty {}
+trait Empty

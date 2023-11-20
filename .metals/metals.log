@@ -5040,3 +5040,667 @@ SEVERE: A severe compiler error occurred, full details of the error can be found
 Nov 20, 2023 12:30:50 PM scala.meta.internal.pc.CompilerAccess handleError
 SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-30-50-505.md
 2023.11.20 12:30:57 WARN  no build target for: C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\boomerangPDS-scala\src\main\java\boomerang\example\BoomerangExampleTarget2.scala
+2023.11.20 12:30:59 ERROR Can't run javac on C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\boomerangPDS-scala\src\main\java\boomerang\example\ExampleMain1.java with options: [-cp
+C:\Users\tifav\AppData\Local\Coursier\cache\v1\https\repo1.maven.org\maven2\com\sourcegraph\semanticdb-javac\0.9.6\semanticdb-javac-0.9.6.jar
+-d
+C:\Users\tifav\AppData\Local\Temp\metals-javac-semanticdb4897533431487441375\target
+-Xplugin:semanticdb -sourceroot:C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\boomerangPDS-scala\src\main\java\boomerang\example -targetroot:C:\Users\tifav\AppData\Local\Temp\metals-javac-semanticdb4897533431487441375\target]
+java.lang.NullPointerException
+	at scala.meta.internal.pc.JavaMetalsGlobal$.makeFileObject(JavaMetalsGlobal.scala:47)
+	at scala.meta.internal.metals.JavaInteractiveSemanticdb.textDocument(JavaInteractiveSemanticdb.scala:73)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$compile$2(InteractiveSemanticdbs.scala:173)
+	at scala.Option.fold(Option.scala:263)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.compile(InteractiveSemanticdbs.scala:173)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$textDocument$4(InteractiveSemanticdbs.scala:98)
+	at scala.util.Try$.apply(Try.scala:210)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$textDocument$1(InteractiveSemanticdbs.scala:98)
+	at java.util.HashMap.compute(null)
+	at java.util.Collections$SynchronizedMap.compute(null)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.textDocument(InteractiveSemanticdbs.scala:89)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.textDocument(InteractiveSemanticdbs.scala:63)
+	at scala.meta.internal.metals.MetalsLspService.$anonfun$didOpen$3(MetalsLspService.scala:1042)
+	at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:467)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(null)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(null)
+	at java.lang.Thread.run(null)
+
+2023.11.20 12:30:59 WARN  Running javac-semanticdb failed for file:///C:/Users/tifav/OneDrive%20-%20ualberta.ca/Desktop/Uni/UofA/Year%204/Term%201/CMPUT%20416/SPDS%20Port/SPDSPort/boomerangPDS-scala/src/main/java/boomerang/example/ExampleMain1.java. Output:
+
+2023.11.20 12:30:59 WARN  no build target for: C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\boomerangPDS-scala\src\main\java\boomerang\example\ExampleMain1.java
+Nov 20, 2023 12:30:59 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-30-59-334.md
+Exception in thread "pool-1-thread-55" java.lang.NoClassDefFoundError: com/sun/source/tree/Tree
+	at scala.meta.internal.parsing.FoldingRangeProvider.$anonfun$getRangedForJava$2(FoldingRangeProvider.scala:48)
+	at scala.Option$WithFilter.map(Option.scala:242)
+	at scala.meta.internal.parsing.FoldingRangeProvider.getRangedForJava(FoldingRangeProvider.scala:45)
+	at scala.meta.internal.metals.MetalsLspService.$anonfun$foldingRange$3(MetalsLspService.scala:1641)
+	at scala.concurrent.Future$.$anonfun$apply$1(Future.scala:687)
+	at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:467)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: java.lang.ClassNotFoundException: com.sun.source.tree.Tree
+	at java.net.URLClassLoader.findClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	... 9 more
+Nov 20, 2023 12:30:59 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-30-59-938.md
+Nov 20, 2023 12:31:00 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-31-00-085.md
+2023.11.20 12:31:04 ERROR Can't run javac on C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\boomerangPDS-scala\src\main\java\boomerang\example\ExampleMain2.java with options: [-cp
+C:\Users\tifav\AppData\Local\Coursier\cache\v1\https\repo1.maven.org\maven2\com\sourcegraph\semanticdb-javac\0.9.6\semanticdb-javac-0.9.6.jar
+-d
+C:\Users\tifav\AppData\Local\Temp\metals-javac-semanticdb1896374346861371312\target
+-Xplugin:semanticdb -sourceroot:C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\boomerangPDS-scala\src\main\java\boomerang\example -targetroot:C:\Users\tifav\AppData\Local\Temp\metals-javac-semanticdb1896374346861371312\target]
+java.lang.NullPointerException
+	at scala.meta.internal.pc.JavaMetalsGlobal$.makeFileObject(JavaMetalsGlobal.scala:47)
+	at scala.meta.internal.metals.JavaInteractiveSemanticdb.textDocument(JavaInteractiveSemanticdb.scala:73)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$compile$2(InteractiveSemanticdbs.scala:173)
+	at scala.Option.fold(Option.scala:263)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.compile(InteractiveSemanticdbs.scala:173)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$textDocument$4(InteractiveSemanticdbs.scala:98)
+	at scala.util.Try$.apply(Try.scala:210)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$textDocument$1(InteractiveSemanticdbs.scala:98)
+	at java.util.HashMap.compute(null)
+	at java.util.Collections$SynchronizedMap.compute(null)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.textDocument(InteractiveSemanticdbs.scala:89)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.textDocument(InteractiveSemanticdbs.scala:63)
+	at scala.meta.internal.metals.MetalsLspService.$anonfun$didOpen$3(MetalsLspService.scala:1042)
+	at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:467)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(null)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(null)
+	at java.lang.Thread.run(null)
+
+2023.11.20 12:31:04 WARN  Running javac-semanticdb failed for file:///C:/Users/tifav/OneDrive%20-%20ualberta.ca/Desktop/Uni/UofA/Year%204/Term%201/CMPUT%20416/SPDS%20Port/SPDSPort/boomerangPDS-scala/src/main/java/boomerang/example/ExampleMain2.java. Output:
+
+2023.11.20 12:31:04 WARN  no build target for: C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\boomerangPDS-scala\src\main\java\boomerang\example\ExampleMain2.java
+Nov 20, 2023 12:31:04 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-31-04-713.md
+Exception in thread "pool-1-thread-47" java.lang.NoClassDefFoundError: com/sun/source/tree/Tree
+	at scala.meta.internal.parsing.FoldingRangeProvider.$anonfun$getRangedForJava$2(FoldingRangeProvider.scala:48)
+	at scala.Option$WithFilter.map(Option.scala:242)
+	at scala.meta.internal.parsing.FoldingRangeProvider.getRangedForJava(FoldingRangeProvider.scala:45)
+	at scala.meta.internal.metals.MetalsLspService.$anonfun$foldingRange$3(MetalsLspService.scala:1641)
+	at scala.concurrent.Future$.$anonfun$apply$1(Future.scala:687)
+	at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:467)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: java.lang.ClassNotFoundException: com.sun.source.tree.Tree
+	at java.net.URLClassLoader.findClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	... 9 more
+Nov 20, 2023 12:31:05 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-31-05-393.md
+Nov 20, 2023 12:31:05 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-31-05-496.md
+Nov 20, 2023 12:31:09 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-31-09-140.md
+2023.11.20 12:31:15 ERROR Can't run javac on C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\boomerangPDS-scala\src\main\java\boomerang\flowfunction\DefaultBackwardFlowFunction.java with options: [-cp
+C:\Users\tifav\AppData\Local\Coursier\cache\v1\https\repo1.maven.org\maven2\com\sourcegraph\semanticdb-javac\0.9.6\semanticdb-javac-0.9.6.jar
+-d
+C:\Users\tifav\AppData\Local\Temp\metals-javac-semanticdb1781746413308105275\target
+-Xplugin:semanticdb -sourceroot:C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\boomerangPDS-scala\src\main\java\boomerang\flowfunction -targetroot:C:\Users\tifav\AppData\Local\Temp\metals-javac-semanticdb1781746413308105275\target]
+java.lang.NullPointerException
+	at scala.meta.internal.pc.JavaMetalsGlobal$.makeFileObject(JavaMetalsGlobal.scala:47)
+	at scala.meta.internal.metals.JavaInteractiveSemanticdb.textDocument(JavaInteractiveSemanticdb.scala:73)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$compile$2(InteractiveSemanticdbs.scala:173)
+	at scala.Option.fold(Option.scala:263)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.compile(InteractiveSemanticdbs.scala:173)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$textDocument$4(InteractiveSemanticdbs.scala:98)
+	at scala.util.Try$.apply(Try.scala:210)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$textDocument$1(InteractiveSemanticdbs.scala:98)
+	at java.util.HashMap.compute(null)
+	at java.util.Collections$SynchronizedMap.compute(null)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.textDocument(InteractiveSemanticdbs.scala:89)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.textDocument(InteractiveSemanticdbs.scala:63)
+	at scala.meta.internal.metals.MetalsLspService.$anonfun$didOpen$3(MetalsLspService.scala:1042)
+	at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:467)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(null)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(null)
+	at java.lang.Thread.run(null)
+
+2023.11.20 12:31:15 WARN  Running javac-semanticdb failed for file:///C:/Users/tifav/OneDrive%20-%20ualberta.ca/Desktop/Uni/UofA/Year%204/Term%201/CMPUT%20416/SPDS%20Port/SPDSPort/boomerangPDS-scala/src/main/java/boomerang/flowfunction/DefaultBackwardFlowFunction.java. Output:
+
+2023.11.20 12:31:15 WARN  no build target for: C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\boomerangPDS-scala\src\main\java\boomerang\flowfunction\DefaultBackwardFlowFunction.java
+Nov 20, 2023 12:31:15 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-31-15-690.md
+Exception in thread "pool-1-thread-64" java.lang.NoClassDefFoundError: com/sun/source/tree/Tree
+	at scala.meta.internal.parsing.FoldingRangeProvider.$anonfun$getRangedForJava$2(FoldingRangeProvider.scala:48)
+	at scala.Option$WithFilter.map(Option.scala:242)
+	at scala.meta.internal.parsing.FoldingRangeProvider.getRangedForJava(FoldingRangeProvider.scala:45)
+	at scala.meta.internal.metals.MetalsLspService.$anonfun$foldingRange$3(MetalsLspService.scala:1641)
+	at scala.concurrent.Future$.$anonfun$apply$1(Future.scala:687)
+	at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:467)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: java.lang.ClassNotFoundException: com.sun.source.tree.Tree
+	at java.net.URLClassLoader.findClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	... 9 more
+Nov 20, 2023 12:31:16 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-31-16-296.md
+Nov 20, 2023 12:31:16 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-31-16-463.md
+2023.11.20 12:31:20 ERROR Can't run javac on C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\boomerangPDS-scala\src\main\java\boomerang\util\AccessPath.java with options: [-cp
+C:\Users\tifav\AppData\Local\Coursier\cache\v1\https\repo1.maven.org\maven2\com\sourcegraph\semanticdb-javac\0.9.6\semanticdb-javac-0.9.6.jar
+-d
+C:\Users\tifav\AppData\Local\Temp\metals-javac-semanticdb1696552030221360220\target
+-Xplugin:semanticdb -sourceroot:C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\boomerangPDS-scala\src\main\java\boomerang\util -targetroot:C:\Users\tifav\AppData\Local\Temp\metals-javac-semanticdb1696552030221360220\target]
+java.lang.NullPointerException
+	at scala.meta.internal.pc.JavaMetalsGlobal$.makeFileObject(JavaMetalsGlobal.scala:47)
+	at scala.meta.internal.metals.JavaInteractiveSemanticdb.textDocument(JavaInteractiveSemanticdb.scala:73)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$compile$2(InteractiveSemanticdbs.scala:173)
+	at scala.Option.fold(Option.scala:263)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.compile(InteractiveSemanticdbs.scala:173)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$textDocument$4(InteractiveSemanticdbs.scala:98)
+	at scala.util.Try$.apply(Try.scala:210)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$textDocument$1(InteractiveSemanticdbs.scala:98)
+	at java.util.HashMap.compute(null)
+	at java.util.Collections$SynchronizedMap.compute(null)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.textDocument(InteractiveSemanticdbs.scala:89)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.textDocument(InteractiveSemanticdbs.scala:63)
+	at scala.meta.internal.metals.MetalsLspService.$anonfun$didOpen$3(MetalsLspService.scala:1042)
+	at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:467)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(null)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(null)
+	at java.lang.Thread.run(null)
+
+2023.11.20 12:31:20 WARN  Running javac-semanticdb failed for file:///C:/Users/tifav/OneDrive%20-%20ualberta.ca/Desktop/Uni/UofA/Year%204/Term%201/CMPUT%20416/SPDS%20Port/SPDSPort/boomerangPDS-scala/src/main/java/boomerang/util/AccessPath.java. Output:
+
+2023.11.20 12:31:20 WARN  no build target for: C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\boomerangPDS-scala\src\main\java\boomerang\util\AccessPath.java
+Nov 20, 2023 12:31:20 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-31-20-749.md
+Exception in thread "pool-1-thread-36" java.lang.NoClassDefFoundError: com/sun/source/tree/Tree
+	at scala.meta.internal.parsing.FoldingRangeProvider.$anonfun$getRangedForJava$2(FoldingRangeProvider.scala:48)
+	at scala.Option$WithFilter.map(Option.scala:242)
+	at scala.meta.internal.parsing.FoldingRangeProvider.getRangedForJava(FoldingRangeProvider.scala:45)
+	at scala.meta.internal.metals.MetalsLspService.$anonfun$foldingRange$3(MetalsLspService.scala:1641)
+	at scala.concurrent.Future$.$anonfun$apply$1(Future.scala:687)
+	at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:467)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: java.lang.ClassNotFoundException: com.sun.source.tree.Tree
+	at java.net.URLClassLoader.findClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	... 9 more
+Nov 20, 2023 12:31:21 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-31-21-347.md
+2023.11.20 12:31:22 ERROR Can't run javac on C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\boomerangPDS-scala\src\main\java\boomerang\util\RegExAccessPath.java with options: [-cp
+C:\Users\tifav\AppData\Local\Coursier\cache\v1\https\repo1.maven.org\maven2\com\sourcegraph\semanticdb-javac\0.9.6\semanticdb-javac-0.9.6.jar
+-d
+C:\Users\tifav\AppData\Local\Temp\metals-javac-semanticdb8482869286407177080\target
+-Xplugin:semanticdb -sourceroot:C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\boomerangPDS-scala\src\main\java\boomerang\util -targetroot:C:\Users\tifav\AppData\Local\Temp\metals-javac-semanticdb8482869286407177080\target]
+java.lang.NullPointerException
+	at scala.meta.internal.pc.JavaMetalsGlobal$.makeFileObject(JavaMetalsGlobal.scala:47)
+	at scala.meta.internal.metals.JavaInteractiveSemanticdb.textDocument(JavaInteractiveSemanticdb.scala:73)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$compile$2(InteractiveSemanticdbs.scala:173)
+	at scala.Option.fold(Option.scala:263)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.compile(InteractiveSemanticdbs.scala:173)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$textDocument$4(InteractiveSemanticdbs.scala:98)
+	at scala.util.Try$.apply(Try.scala:210)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$textDocument$1(InteractiveSemanticdbs.scala:98)
+	at java.util.HashMap.compute(null)
+	at java.util.Collections$SynchronizedMap.compute(null)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.textDocument(InteractiveSemanticdbs.scala:89)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.textDocument(InteractiveSemanticdbs.scala:63)
+	at scala.meta.internal.metals.MetalsLspService.$anonfun$didOpen$3(MetalsLspService.scala:1042)
+	at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:467)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(null)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(null)
+	at java.lang.Thread.run(null)
+
+2023.11.20 12:31:22 WARN  Running javac-semanticdb failed for file:///C:/Users/tifav/OneDrive%20-%20ualberta.ca/Desktop/Uni/UofA/Year%204/Term%201/CMPUT%20416/SPDS%20Port/SPDSPort/boomerangPDS-scala/src/main/java/boomerang/util/RegExAccessPath.java. Output:
+
+2023.11.20 12:31:22 WARN  no build target for: C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\boomerangPDS-scala\src\main\java\boomerang\util\RegExAccessPath.java
+Nov 20, 2023 12:31:23 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-31-23-119.md
+Exception in thread "pool-1-thread-68" java.lang.NoClassDefFoundError: com/sun/source/tree/Tree
+	at scala.meta.internal.parsing.FoldingRangeProvider.$anonfun$getRangedForJava$2(FoldingRangeProvider.scala:48)
+	at scala.Option$WithFilter.map(Option.scala:242)
+	at scala.meta.internal.parsing.FoldingRangeProvider.getRangedForJava(FoldingRangeProvider.scala:45)
+	at scala.meta.internal.metals.MetalsLspService.$anonfun$foldingRange$3(MetalsLspService.scala:1641)
+	at scala.concurrent.Future$.$anonfun$apply$1(Future.scala:687)
+	at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:467)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: java.lang.ClassNotFoundException: com.sun.source.tree.Tree
+	at java.net.URLClassLoader.findClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	... 9 more
+Nov 20, 2023 12:31:23 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-31-23-703.md
+2023.11.20 12:31:27 ERROR Can't run javac on C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\boomerangPDS-scala\src\main\java\boomerang\BackwardQuery.java with options: [-cp
+C:\Users\tifav\AppData\Local\Coursier\cache\v1\https\repo1.maven.org\maven2\com\sourcegraph\semanticdb-javac\0.9.6\semanticdb-javac-0.9.6.jar
+-d
+C:\Users\tifav\AppData\Local\Temp\metals-javac-semanticdb7489631133800604693\target
+-Xplugin:semanticdb -sourceroot:C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\boomerangPDS-scala\src\main\java\boomerang -targetroot:C:\Users\tifav\AppData\Local\Temp\metals-javac-semanticdb7489631133800604693\target]
+java.lang.NullPointerException
+	at scala.meta.internal.pc.JavaMetalsGlobal$.makeFileObject(JavaMetalsGlobal.scala:47)
+	at scala.meta.internal.metals.JavaInteractiveSemanticdb.textDocument(JavaInteractiveSemanticdb.scala:73)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$compile$2(InteractiveSemanticdbs.scala:173)
+	at scala.Option.fold(Option.scala:263)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.compile(InteractiveSemanticdbs.scala:173)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$textDocument$4(InteractiveSemanticdbs.scala:98)
+	at scala.util.Try$.apply(Try.scala:210)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$textDocument$1(InteractiveSemanticdbs.scala:98)
+	at java.util.HashMap.compute(null)
+	at java.util.Collections$SynchronizedMap.compute(null)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.textDocument(InteractiveSemanticdbs.scala:89)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.textDocument(InteractiveSemanticdbs.scala:63)
+	at scala.meta.internal.metals.MetalsLspService.$anonfun$didOpen$3(MetalsLspService.scala:1042)
+	at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:467)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(null)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(null)
+	at java.lang.Thread.run(null)
+
+2023.11.20 12:31:27 WARN  Running javac-semanticdb failed for file:///C:/Users/tifav/OneDrive%20-%20ualberta.ca/Desktop/Uni/UofA/Year%204/Term%201/CMPUT%20416/SPDS%20Port/SPDSPort/boomerangPDS-scala/src/main/java/boomerang/BackwardQuery.java. Output:
+
+2023.11.20 12:31:27 WARN  no build target for: C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\boomerangPDS-scala\src\main\java\boomerang\BackwardQuery.java
+Nov 20, 2023 12:31:27 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-31-27-551.md
+Exception in thread "pool-1-thread-57" java.lang.NoClassDefFoundError: com/sun/source/tree/Tree
+	at scala.meta.internal.parsing.FoldingRangeProvider.$anonfun$getRangedForJava$2(FoldingRangeProvider.scala:48)
+	at scala.Option$WithFilter.map(Option.scala:242)
+	at scala.meta.internal.parsing.FoldingRangeProvider.getRangedForJava(FoldingRangeProvider.scala:45)
+	at scala.meta.internal.metals.MetalsLspService.$anonfun$foldingRange$3(MetalsLspService.scala:1641)
+	at scala.concurrent.Future$.$anonfun$apply$1(Future.scala:687)
+	at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:467)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: java.lang.ClassNotFoundException: com.sun.source.tree.Tree
+	at java.net.URLClassLoader.findClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	... 9 more
+Nov 20, 2023 12:31:28 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-31-28-106.md
+Nov 20, 2023 12:31:28 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-31-28-242.md
+2023.11.20 12:31:32 ERROR Can't run javac on C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\boomerangPDS-scala\src\main\java\boomerang\BoomerangOptions.java with options: [-cp
+C:\Users\tifav\AppData\Local\Coursier\cache\v1\https\repo1.maven.org\maven2\com\sourcegraph\semanticdb-javac\0.9.6\semanticdb-javac-0.9.6.jar
+-d
+C:\Users\tifav\AppData\Local\Temp\metals-javac-semanticdb4804357764263439341\target
+-Xplugin:semanticdb -sourceroot:C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\boomerangPDS-scala\src\main\java\boomerang -targetroot:C:\Users\tifav\AppData\Local\Temp\metals-javac-semanticdb4804357764263439341\target]
+java.lang.NullPointerException
+	at scala.meta.internal.pc.JavaMetalsGlobal$.makeFileObject(JavaMetalsGlobal.scala:47)
+	at scala.meta.internal.metals.JavaInteractiveSemanticdb.textDocument(JavaInteractiveSemanticdb.scala:73)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$compile$2(InteractiveSemanticdbs.scala:173)
+	at scala.Option.fold(Option.scala:263)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.compile(InteractiveSemanticdbs.scala:173)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$textDocument$4(InteractiveSemanticdbs.scala:98)
+	at scala.util.Try$.apply(Try.scala:210)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$textDocument$1(InteractiveSemanticdbs.scala:98)
+	at java.util.HashMap.compute(null)
+	at java.util.Collections$SynchronizedMap.compute(null)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.textDocument(InteractiveSemanticdbs.scala:89)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.textDocument(InteractiveSemanticdbs.scala:63)
+	at scala.meta.internal.metals.MetalsLspService.$anonfun$didOpen$3(MetalsLspService.scala:1042)
+	at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:467)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(null)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(null)
+	at java.lang.Thread.run(null)
+
+2023.11.20 12:31:32 WARN  Running javac-semanticdb failed for file:///C:/Users/tifav/OneDrive%20-%20ualberta.ca/Desktop/Uni/UofA/Year%204/Term%201/CMPUT%20416/SPDS%20Port/SPDSPort/boomerangPDS-scala/src/main/java/boomerang/BoomerangOptions.java. Output:
+
+2023.11.20 12:31:32 WARN  no build target for: C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\boomerangPDS-scala\src\main\java\boomerang\BoomerangOptions.java
+Nov 20, 2023 12:31:32 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-31-32-988.md
+Exception in thread "pool-1-thread-49" java.lang.NoClassDefFoundError: com/sun/source/tree/Tree
+	at scala.meta.internal.parsing.FoldingRangeProvider.$anonfun$getRangedForJava$2(FoldingRangeProvider.scala:48)
+	at scala.Option$WithFilter.map(Option.scala:242)
+	at scala.meta.internal.parsing.FoldingRangeProvider.getRangedForJava(FoldingRangeProvider.scala:45)
+	at scala.meta.internal.metals.MetalsLspService.$anonfun$foldingRange$3(MetalsLspService.scala:1641)
+	at scala.concurrent.Future$.$anonfun$apply$1(Future.scala:687)
+	at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:467)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: java.lang.ClassNotFoundException: com.sun.source.tree.Tree
+	at java.net.URLClassLoader.findClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	... 9 more
+Nov 20, 2023 12:31:33 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-31-33-637.md
+Nov 20, 2023 12:31:37 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-31-37-395.md
+2023.11.20 12:33:12 ERROR Can't run javac on C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\WPDS-scala\src\main\java\wpds\debug\Debugger.java with options: [-cp
+C:\Users\tifav\AppData\Local\Coursier\cache\v1\https\repo1.maven.org\maven2\com\sourcegraph\semanticdb-javac\0.9.6\semanticdb-javac-0.9.6.jar
+-d
+C:\Users\tifav\AppData\Local\Temp\metals-javac-semanticdb9220256179146629248\target
+-Xplugin:semanticdb -sourceroot:C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\WPDS-scala\src\main\java\wpds\debug -targetroot:C:\Users\tifav\AppData\Local\Temp\metals-javac-semanticdb9220256179146629248\target]
+java.lang.NullPointerException
+	at scala.meta.internal.pc.JavaMetalsGlobal$.makeFileObject(JavaMetalsGlobal.scala:47)
+	at scala.meta.internal.metals.JavaInteractiveSemanticdb.textDocument(JavaInteractiveSemanticdb.scala:73)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$compile$2(InteractiveSemanticdbs.scala:173)
+	at scala.Option.fold(Option.scala:263)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.compile(InteractiveSemanticdbs.scala:173)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$textDocument$4(InteractiveSemanticdbs.scala:98)
+	at scala.util.Try$.apply(Try.scala:210)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$textDocument$1(InteractiveSemanticdbs.scala:98)
+	at java.util.HashMap.compute(null)
+	at java.util.Collections$SynchronizedMap.compute(null)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.textDocument(InteractiveSemanticdbs.scala:89)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.textDocument(InteractiveSemanticdbs.scala:63)
+	at scala.meta.internal.metals.MetalsLspService.$anonfun$didOpen$3(MetalsLspService.scala:1042)
+	at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:467)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(null)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(null)
+	at java.lang.Thread.run(null)
+
+2023.11.20 12:33:12 WARN  Running javac-semanticdb failed for file:///C:/Users/tifav/OneDrive%20-%20ualberta.ca/Desktop/Uni/UofA/Year%204/Term%201/CMPUT%20416/SPDS%20Port/SPDSPort/WPDS-scala/src/main/java/wpds/debug/Debugger.java. Output:
+
+2023.11.20 12:33:12 WARN  no build target for: C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\WPDS-scala\src\main\java\wpds\debug\Debugger.java
+Nov 20, 2023 12:33:12 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-33-12-495.md
+Exception in thread "pool-1-thread-93" java.lang.NoClassDefFoundError: com/sun/source/tree/Tree
+	at scala.meta.internal.parsing.FoldingRangeProvider.$anonfun$getRangedForJava$2(FoldingRangeProvider.scala:48)
+	at scala.Option$WithFilter.map(Option.scala:242)
+	at scala.meta.internal.parsing.FoldingRangeProvider.getRangedForJava(FoldingRangeProvider.scala:45)
+	at scala.meta.internal.metals.MetalsLspService.$anonfun$foldingRange$3(MetalsLspService.scala:1641)
+	at scala.concurrent.Future$.$anonfun$apply$1(Future.scala:687)
+	at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:467)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: java.lang.ClassNotFoundException: com.sun.source.tree.Tree
+	at java.net.URLClassLoader.findClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	... 9 more
+Nov 20, 2023 12:33:13 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-33-13-080.md
+Nov 20, 2023 12:33:13 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-33-13-231.md
+Nov 20, 2023 12:33:16 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-33-16-077.md
+Exception in thread "pool-1-thread-79" java.lang.NoClassDefFoundError: com/sun/source/tree/Tree
+	at scala.meta.internal.parsing.FoldingRangeProvider.$anonfun$getRangedForJava$2(FoldingRangeProvider.scala:48)
+	at scala.Option$WithFilter.map(Option.scala:242)
+	at scala.meta.internal.parsing.FoldingRangeProvider.getRangedForJava(FoldingRangeProvider.scala:45)
+	at scala.meta.internal.metals.MetalsLspService.$anonfun$foldingRange$3(MetalsLspService.scala:1641)
+	at scala.concurrent.Future$.$anonfun$apply$1(Future.scala:687)
+	at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:467)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: java.lang.ClassNotFoundException: com.sun.source.tree.Tree
+	at java.net.URLClassLoader.findClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	... 9 more
+2023.11.20 12:33:30 ERROR Can't run javac on C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\WPDS-scala\src\main\java\wpds\debug\Debugger.java with options: [-cp
+C:\Users\tifav\AppData\Local\Coursier\cache\v1\https\repo1.maven.org\maven2\com\sourcegraph\semanticdb-javac\0.9.6\semanticdb-javac-0.9.6.jar
+-d
+C:\Users\tifav\AppData\Local\Temp\metals-javac-semanticdb1669983509067873839\target
+-Xplugin:semanticdb -sourceroot:C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\WPDS-scala\src\main\java\wpds\debug -targetroot:C:\Users\tifav\AppData\Local\Temp\metals-javac-semanticdb1669983509067873839\target]
+java.lang.NullPointerException
+	at scala.meta.internal.pc.JavaMetalsGlobal$.makeFileObject(JavaMetalsGlobal.scala:47)
+	at scala.meta.internal.metals.JavaInteractiveSemanticdb.textDocument(JavaInteractiveSemanticdb.scala:73)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$compile$2(InteractiveSemanticdbs.scala:173)
+	at scala.Option.fold(Option.scala:263)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.compile(InteractiveSemanticdbs.scala:173)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$textDocument$4(InteractiveSemanticdbs.scala:98)
+	at scala.util.Try$.apply(Try.scala:210)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$textDocument$1(InteractiveSemanticdbs.scala:98)
+	at java.util.HashMap.compute(null)
+	at java.util.Collections$SynchronizedMap.compute(null)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.textDocument(InteractiveSemanticdbs.scala:89)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.textDocument(InteractiveSemanticdbs.scala:63)
+	at scala.meta.internal.metals.AggregateSemanticdbs.loop$1(AggregateSemanticdbs.scala:30)
+	at scala.meta.internal.metals.AggregateSemanticdbs.textDocument(AggregateSemanticdbs.scala:36)
+	at scala.meta.internal.metals.CodeLensProvider.findLenses(CodeLensProvider.scala:22)
+	at scala.meta.internal.metals.MetalsLspService.$anonfun$codeLens$3(MetalsLspService.scala:1625)
+	at scala.meta.internal.metals.TimerProvider.timedThunk(TimerProvider.scala:25)
+	at scala.meta.internal.metals.MetalsLspService.$anonfun$codeLens$2(MetalsLspService.scala:1623)
+	at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:467)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(null)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(null)
+	at java.lang.Thread.run(null)
+
+2023.11.20 12:33:30 WARN  Running javac-semanticdb failed for file:///C:/Users/tifav/OneDrive%20-%20ualberta.ca/Desktop/Uni/UofA/Year%204/Term%201/CMPUT%20416/SPDS%20Port/SPDSPort/WPDS-scala/src/main/java/wpds/debug/Debugger.java. Output:
+
+Nov 20, 2023 12:33:30 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-33-30-762.md
+2023.11.20 12:33:30 WARN  no build target for: C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\WPDS-scala\src\main\java\wpds\debug\Debugger.java
+Nov 20, 2023 12:33:31 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-33-31-449.md
+2023.11.20 12:33:40 WARN  no build target for: C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\WPDS-scala\src\main\java\wpds\debug\Debugger.scala
+2023.11.20 12:34:52 ERROR Can't run javac on C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\WPDS-scala\src\main\java\wpds\interfaces\ForwardDFSEpsilonVisitor.java with options: [-cp
+C:\Users\tifav\AppData\Local\Coursier\cache\v1\https\repo1.maven.org\maven2\com\sourcegraph\semanticdb-javac\0.9.6\semanticdb-javac-0.9.6.jar
+-d
+C:\Users\tifav\AppData\Local\Temp\metals-javac-semanticdb346312877693731149\target
+-Xplugin:semanticdb -sourceroot:C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\WPDS-scala\src\main\java\wpds\interfaces -targetroot:C:\Users\tifav\AppData\Local\Temp\metals-javac-semanticdb346312877693731149\target]
+java.lang.NullPointerException
+	at scala.meta.internal.pc.JavaMetalsGlobal$.makeFileObject(JavaMetalsGlobal.scala:47)
+	at scala.meta.internal.metals.JavaInteractiveSemanticdb.textDocument(JavaInteractiveSemanticdb.scala:73)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$compile$2(InteractiveSemanticdbs.scala:173)
+	at scala.Option.fold(Option.scala:263)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.compile(InteractiveSemanticdbs.scala:173)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$textDocument$4(InteractiveSemanticdbs.scala:98)
+	at scala.util.Try$.apply(Try.scala:210)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$textDocument$1(InteractiveSemanticdbs.scala:98)
+	at java.util.HashMap.compute(null)
+	at java.util.Collections$SynchronizedMap.compute(null)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.textDocument(InteractiveSemanticdbs.scala:89)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.textDocument(InteractiveSemanticdbs.scala:63)
+	at scala.meta.internal.metals.MetalsLspService.$anonfun$didOpen$3(MetalsLspService.scala:1042)
+	at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:467)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(null)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(null)
+	at java.lang.Thread.run(null)
+
+2023.11.20 12:34:52 WARN  Running javac-semanticdb failed for file:///C:/Users/tifav/OneDrive%20-%20ualberta.ca/Desktop/Uni/UofA/Year%204/Term%201/CMPUT%20416/SPDS%20Port/SPDSPort/WPDS-scala/src/main/java/wpds/interfaces/ForwardDFSEpsilonVisitor.java. Output:
+
+2023.11.20 12:34:52 WARN  no build target for: C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\WPDS-scala\src\main\java\wpds\interfaces\ForwardDFSEpsilonVisitor.java
+Nov 20, 2023 12:34:52 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-34-52-248.md
+Exception in thread "pool-1-thread-102" java.lang.NoClassDefFoundError: com/sun/source/tree/Tree
+	at scala.meta.internal.parsing.FoldingRangeProvider.$anonfun$getRangedForJava$2(FoldingRangeProvider.scala:48)
+	at scala.Option$WithFilter.map(Option.scala:242)
+	at scala.meta.internal.parsing.FoldingRangeProvider.getRangedForJava(FoldingRangeProvider.scala:45)
+	at scala.meta.internal.metals.MetalsLspService.$anonfun$foldingRange$3(MetalsLspService.scala:1641)
+	at scala.concurrent.Future$.$anonfun$apply$1(Future.scala:687)
+	at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:467)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: java.lang.ClassNotFoundException: com.sun.source.tree.Tree
+	at java.net.URLClassLoader.findClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	... 9 more
+Nov 20, 2023 12:34:52 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-34-52-844.md
+Nov 20, 2023 12:34:53 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-34-53-123.md
+2023.11.20 12:34:54 WARN  no build target for: C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\WPDS-scala\src\main\java\wpds\interfaces\Empty.java
+2023.11.20 12:34:54 ERROR Can't run javac on C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\WPDS-scala\src\main\java\wpds\interfaces\Empty.java with options: [-cp
+C:\Users\tifav\AppData\Local\Coursier\cache\v1\https\repo1.maven.org\maven2\com\sourcegraph\semanticdb-javac\0.9.6\semanticdb-javac-0.9.6.jar
+-d
+C:\Users\tifav\AppData\Local\Temp\metals-javac-semanticdb8642080964570873936\target
+-Xplugin:semanticdb -sourceroot:C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\WPDS-scala\src\main\java\wpds\interfaces -targetroot:C:\Users\tifav\AppData\Local\Temp\metals-javac-semanticdb8642080964570873936\target]
+java.lang.NullPointerException
+	at scala.meta.internal.pc.JavaMetalsGlobal$.makeFileObject(JavaMetalsGlobal.scala:47)
+	at scala.meta.internal.metals.JavaInteractiveSemanticdb.textDocument(JavaInteractiveSemanticdb.scala:73)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$compile$2(InteractiveSemanticdbs.scala:173)
+	at scala.Option.fold(Option.scala:263)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.compile(InteractiveSemanticdbs.scala:173)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$textDocument$4(InteractiveSemanticdbs.scala:98)
+	at scala.util.Try$.apply(Try.scala:210)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$textDocument$1(InteractiveSemanticdbs.scala:98)
+	at java.util.HashMap.compute(null)
+	at java.util.Collections$SynchronizedMap.compute(null)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.textDocument(InteractiveSemanticdbs.scala:89)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.textDocument(InteractiveSemanticdbs.scala:63)
+	at scala.meta.internal.metals.MetalsLspService.$anonfun$didOpen$3(MetalsLspService.scala:1042)
+	at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:467)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(null)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(null)
+	at java.lang.Thread.run(null)
+
+2023.11.20 12:34:54 WARN  Running javac-semanticdb failed for file:///C:/Users/tifav/OneDrive%20-%20ualberta.ca/Desktop/Uni/UofA/Year%204/Term%201/CMPUT%20416/SPDS%20Port/SPDSPort/WPDS-scala/src/main/java/wpds/interfaces/Empty.java. Output:
+
+Nov 20, 2023 12:34:54 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-34-54-917.md
+Exception in thread "pool-1-thread-126" java.lang.NoClassDefFoundError: com/sun/source/tree/Tree
+	at scala.meta.internal.parsing.FoldingRangeProvider.$anonfun$getRangedForJava$2(FoldingRangeProvider.scala:48)
+	at scala.Option$WithFilter.map(Option.scala:242)
+	at scala.meta.internal.parsing.FoldingRangeProvider.getRangedForJava(FoldingRangeProvider.scala:45)
+	at scala.meta.internal.metals.MetalsLspService.$anonfun$foldingRange$3(MetalsLspService.scala:1641)
+	at scala.concurrent.Future$.$anonfun$apply$1(Future.scala:687)
+	at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:467)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: java.lang.ClassNotFoundException: com.sun.source.tree.Tree
+	at java.net.URLClassLoader.findClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	... 9 more
+Nov 20, 2023 12:34:55 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-34-55-442.md
+Exception in thread "pool-1-thread-119" java.lang.NoClassDefFoundError: com/sun/source/tree/Tree
+	at scala.meta.internal.parsing.FoldingRangeProvider.$anonfun$getRangedForJava$2(FoldingRangeProvider.scala:48)
+	at scala.Option$WithFilter.map(Option.scala:242)
+	at scala.meta.internal.parsing.FoldingRangeProvider.getRangedForJava(FoldingRangeProvider.scala:45)
+	at scala.meta.internal.metals.MetalsLspService.$anonfun$foldingRange$3(MetalsLspService.scala:1641)
+	at scala.concurrent.Future$.$anonfun$apply$1(Future.scala:687)
+	at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:467)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: java.lang.ClassNotFoundException: com.sun.source.tree.Tree
+	at java.net.URLClassLoader.findClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	... 9 more
+2023.11.20 12:35:17 ERROR Can't run javac on C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\WPDS-scala\src\main\java\wpds\interfaces\Empty.java with options: [-cp
+C:\Users\tifav\AppData\Local\Coursier\cache\v1\https\repo1.maven.org\maven2\com\sourcegraph\semanticdb-javac\0.9.6\semanticdb-javac-0.9.6.jar
+-d
+C:\Users\tifav\AppData\Local\Temp\metals-javac-semanticdb1109827333255701601\target
+-Xplugin:semanticdb -sourceroot:C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\WPDS-scala\src\main\java\wpds\interfaces -targetroot:C:\Users\tifav\AppData\Local\Temp\metals-javac-semanticdb1109827333255701601\target]
+java.lang.NullPointerException
+	at scala.meta.internal.pc.JavaMetalsGlobal$.makeFileObject(JavaMetalsGlobal.scala:47)
+	at scala.meta.internal.metals.JavaInteractiveSemanticdb.textDocument(JavaInteractiveSemanticdb.scala:73)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$compile$2(InteractiveSemanticdbs.scala:173)
+	at scala.Option.fold(Option.scala:263)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.compile(InteractiveSemanticdbs.scala:173)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$textDocument$4(InteractiveSemanticdbs.scala:98)
+	at scala.util.Try$.apply(Try.scala:210)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$textDocument$1(InteractiveSemanticdbs.scala:98)
+	at java.util.HashMap.compute(null)
+	at java.util.Collections$SynchronizedMap.compute(null)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.textDocument(InteractiveSemanticdbs.scala:89)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.textDocument(InteractiveSemanticdbs.scala:63)
+	at scala.meta.internal.metals.AggregateSemanticdbs.loop$1(AggregateSemanticdbs.scala:30)
+	at scala.meta.internal.metals.AggregateSemanticdbs.textDocument(AggregateSemanticdbs.scala:36)
+	at scala.meta.internal.metals.CodeLensProvider.findLenses(CodeLensProvider.scala:22)
+	at scala.meta.internal.metals.MetalsLspService.$anonfun$codeLens$3(MetalsLspService.scala:1625)
+	at scala.meta.internal.metals.TimerProvider.timedThunk(TimerProvider.scala:25)
+	at scala.meta.internal.metals.MetalsLspService.$anonfun$codeLens$2(MetalsLspService.scala:1623)
+	at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:467)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(null)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(null)
+	at java.lang.Thread.run(null)
+
+2023.11.20 12:35:17 WARN  Running javac-semanticdb failed for file:///C:/Users/tifav/OneDrive%20-%20ualberta.ca/Desktop/Uni/UofA/Year%204/Term%201/CMPUT%20416/SPDS%20Port/SPDSPort/WPDS-scala/src/main/java/wpds/interfaces/Empty.java. Output:
+
+Nov 20, 2023 12:35:18 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-35-18-080.md
+2023.11.20 12:35:17 WARN  no build target for: C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\WPDS-scala\src\main\java\wpds\interfaces\Empty.java
+Nov 20, 2023 12:35:18 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-35-18-759.md
+2023.11.20 12:35:24 WARN  no build target for: C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\WPDS-scala\src\main\java\wpds\interfaces\Empty.scala
+Nov 20, 2023 12:35:24 PM org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 219
+2023.11.20 12:35:26 WARN  no build target for: C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\WPDS-scala\src\main\java\wpds\interfaces\ForwardDFSEpsilonVisitor.java
+Nov 20, 2023 12:35:26 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-35-26-665.md
+Exception in thread "pool-1-thread-112" java.lang.NoClassDefFoundError: com/sun/source/tree/Tree
+	at scala.meta.internal.parsing.FoldingRangeProvider.$anonfun$getRangedForJava$2(FoldingRangeProvider.scala:48)
+	at scala.Option$WithFilter.map(Option.scala:242)
+	at scala.meta.internal.parsing.FoldingRangeProvider.getRangedForJava(FoldingRangeProvider.scala:45)
+	at scala.meta.internal.metals.MetalsLspService.$anonfun$foldingRange$3(MetalsLspService.scala:1641)
+	at scala.concurrent.Future$.$anonfun$apply$1(Future.scala:687)
+	at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:467)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: java.lang.ClassNotFoundException: com.sun.source.tree.Tree
+	at java.net.URLClassLoader.findClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	... 9 more
+Nov 20, 2023 12:35:27 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-35-27-248.md
+2023.11.20 12:35:52 ERROR Can't run javac on C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\WPDS-scala\src\main\java\wpds\interfaces\ForwardDFSVisitor.java with options: [-cp
+C:\Users\tifav\AppData\Local\Coursier\cache\v1\https\repo1.maven.org\maven2\com\sourcegraph\semanticdb-javac\0.9.6\semanticdb-javac-0.9.6.jar
+-d
+C:\Users\tifav\AppData\Local\Temp\metals-javac-semanticdb382660996130535944\target
+-Xplugin:semanticdb -sourceroot:C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\WPDS-scala\src\main\java\wpds\interfaces -targetroot:C:\Users\tifav\AppData\Local\Temp\metals-javac-semanticdb382660996130535944\target]
+java.lang.NullPointerException
+	at scala.meta.internal.pc.JavaMetalsGlobal$.makeFileObject(JavaMetalsGlobal.scala:47)
+	at scala.meta.internal.metals.JavaInteractiveSemanticdb.textDocument(JavaInteractiveSemanticdb.scala:73)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$compile$2(InteractiveSemanticdbs.scala:173)
+	at scala.Option.fold(Option.scala:263)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.compile(InteractiveSemanticdbs.scala:173)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$textDocument$4(InteractiveSemanticdbs.scala:98)
+	at scala.util.Try$.apply(Try.scala:210)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$textDocument$1(InteractiveSemanticdbs.scala:98)
+	at java.util.HashMap.compute(null)
+	at java.util.Collections$SynchronizedMap.compute(null)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.textDocument(InteractiveSemanticdbs.scala:89)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.textDocument(InteractiveSemanticdbs.scala:63)
+	at scala.meta.internal.metals.MetalsLspService.$anonfun$didOpen$3(MetalsLspService.scala:1042)
+	at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:467)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(null)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(null)
+	at java.lang.Thread.run(null)
+
+2023.11.20 12:35:52 WARN  Running javac-semanticdb failed for file:///C:/Users/tifav/OneDrive%20-%20ualberta.ca/Desktop/Uni/UofA/Year%204/Term%201/CMPUT%20416/SPDS%20Port/SPDSPort/WPDS-scala/src/main/java/wpds/interfaces/ForwardDFSVisitor.java. Output:
+
+2023.11.20 12:35:52 WARN  no build target for: C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\WPDS-scala\src\main\java\wpds\interfaces\ForwardDFSVisitor.java
+Nov 20, 2023 12:35:53 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-35-53-016.md
+Exception in thread "pool-1-thread-122" java.lang.NoClassDefFoundError: com/sun/source/tree/Tree
+	at scala.meta.internal.parsing.FoldingRangeProvider.$anonfun$getRangedForJava$2(FoldingRangeProvider.scala:48)
+	at scala.Option$WithFilter.map(Option.scala:242)
+	at scala.meta.internal.parsing.FoldingRangeProvider.getRangedForJava(FoldingRangeProvider.scala:45)
+	at scala.meta.internal.metals.MetalsLspService.$anonfun$foldingRange$3(MetalsLspService.scala:1641)
+	at scala.concurrent.Future$.$anonfun$apply$1(Future.scala:687)
+	at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:467)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: java.lang.ClassNotFoundException: com.sun.source.tree.Tree
+	at java.net.URLClassLoader.findClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Unknown Source)
+	at java.lang.ClassLoader.loadClass(Unknown Source)
+	... 9 more
+Nov 20, 2023 12:35:53 PM scala.meta.internal.pc.CompilerAccess handleError
+SEVERE: A severe compiler error occurred, full details of the error can be found in the error report C:\Users\tifav\OneDrive - ualberta.ca\Desktop\Uni\UofA\Year 4\Term 1\CMPUT 416\SPDS Port\SPDSPort\.metals\.reports\metals-full\2023-11-20\r_compiler-error_12-35-53-669.md
