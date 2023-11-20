@@ -9,23 +9,16 @@
  * <p>Contributors: Johannes Spaeth - initial API and implementation
  * *****************************************************************************
  */
-package sync.pds.solver;
+package sync.pds.solver
 
-import wpds.impl.NormalRule;
-import wpds.impl.Transition;
-import wpds.impl.Weight;
-import wpds.interfaces.Location;
-import wpds.interfaces.State;
+import wpds.impl.{NormalRule, Transition, Weight}
+import wpds.interfaces.{Location, State}
 
-public class CastNormalRule<N extends Location, D extends State, W extends Weight>
-    extends NormalRule<N, D, W> {
+class CastNormalRule[N <: Location, D <: State, W <: Weight](
+  s1: D, l1: N, s2: D, l2: N, w: W
+) extends NormalRule[N, D, W](s1, l1, s2, l2, w) {
 
-  public CastNormalRule(D s1, N l1, D s2, N l2, W w) {
-    super(s1, l1, s2, l2, w);
-  }
-
-  @Override
-  public boolean canBeApplied(Transition<N, D> t, W weight) {
-    return super.canBeApplied(t, weight);
+  override def canBeApplied(t: Transition[N, D], weight: W): Boolean = {
+    super.canBeApplied(t, weight)
   }
 }
