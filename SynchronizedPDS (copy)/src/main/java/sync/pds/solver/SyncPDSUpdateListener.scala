@@ -9,6 +9,11 @@
  * <p>Contributors: Johannes Spaeth - initial API and implementation
  * *****************************************************************************
  */
-package wpds.interfaces;
+package sync.pds.solver
 
-public interface Empty {}
+import sync.pds.solver.nodes.Node
+import wpds.interfaces.Location
+
+trait SyncPDSUpdateListener[Stmt <: Location, Fact] {
+  def onReachableNodeAdded(reachableNode: Nothing): Unit
+}

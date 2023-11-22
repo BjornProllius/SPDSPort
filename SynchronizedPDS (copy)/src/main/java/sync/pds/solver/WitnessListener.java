@@ -9,10 +9,16 @@
  * <p>Contributors: Johannes Spaeth - initial API and implementation
  * *****************************************************************************
  */
-package wpds.debug;
+package sync.pds.solver;
 
-import wpds.impl.Weight;
+import sync.pds.solver.nodes.INode;
+import sync.pds.solver.nodes.Node;
+import wpds.impl.Transition;
 import wpds.interfaces.Location;
-import wpds.interfaces.State;
 
-public interface Debugger<N extends Location, D extends State, W extends Weight> {}
+public interface WitnessListener<Stmt extends Location, Fact, Field extends Location> {
+
+  void fieldWitness(Transition<Field, INode<Node<Stmt, Fact>>> transition);
+
+  void callWitness(Transition<Stmt, INode<Fact>> t);
+}

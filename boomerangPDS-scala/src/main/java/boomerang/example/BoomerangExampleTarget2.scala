@@ -13,9 +13,15 @@ package boomerang.example
 
 object BoomerangExampleTarget2 {
   def main(args: Array[String]): Unit = {
+<<<<<<< HEAD
     val a = new ClassWithField()
     val b = a
     val n = new NestedClassWithField()
+=======
+    val a = new ClassWithField
+    val b = a
+    val n = new NestedClassWithField
+>>>>>>> 63e871a8fb122c2fbf8a60142e0af7dde27a8f18
     n.nested = b
     staticCallOnFile(n)
   }
@@ -29,9 +35,18 @@ object BoomerangExampleTarget2 {
     var field: Int = 10
   }
 
+<<<<<<< HEAD
   class ObjectOfInterest {}
+=======
+  class ObjectOfInterest
+>>>>>>> 63e871a8fb122c2fbf8a60142e0af7dde27a8f18
 
   class NestedClassWithField {
     var nested: ClassWithField = _
   }
+<<<<<<< HEAD
 }
+=======
+}
+
+>>>>>>> 63e871a8fb122c2fbf8a60142e0af7dde27a8f18
