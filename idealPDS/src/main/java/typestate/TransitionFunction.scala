@@ -4,9 +4,9 @@
  * available under the terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
  *
- * <p>SPDX-License-Identifier: EPL-2.0
+ * SPDX-License-Identifier: EPL-2.0
  *
- * <p>Contributors: Johannes Spaeth - initial API and implementation
+ * Contributors: Johannes Spaeth - initial API and implementation
  * *****************************************************************************
  */
 package typestate
@@ -17,98 +17,96 @@ import java.util.{Collection, Collections, HashSet, Set}
 import typestate.finiteautomata.{ITransition, Transition}
 import wpds.impl.Weight
 
-class TransitionFunction(trans: Set[_ <: ITransition], stateChangeStatements: Set[Edge])
-  extends Weight {
+class TransitionFunction(trans: Set[_ <: ITransition], var stateChangeStatements: Set[Edge]) extends Weight {
 
-  private val value: Set[ITransition] = new HashSet[ITransition](trans)
-  private val rep: String = null
-  private var stateChangeStatementsVar: Set[Edge] = stateChangeStatements
+  private val value: Set[ITransition] = new HashSet(trans)
+  private var rep: String = null
 
   def this(trans: ITransition, stateChangeStatements: Set[Edge]) {
-    this(new HashSet[ITransition](Collections.singleton(trans)), stateChangeStatements)
-  }
+    this(Set(trans), stateChangeStatements)
+  };
 
   private def this(rep: String) {
-    this(Sets.newHashSet[ITransition](), Sets.newHashSet[Edge]())
+    this(Set.empty[ITransition], Set.empty[Edge])
     this.rep = rep
-  }
+    this.stateChangeStatements = Set.empty[Edge]
+  };
 
-  def values(): Collection[ITransition] = Lists.newArrayList[ITransition](value)
+  def values(): Collection[ITransition] = Lists.newArrayList(value);
 
-  def getLastStateChangeStatements: Set[Edge] = stateChangeStatementsVar
+  def getLastStateChangeStatements: Set[Edge] = stateChangeStatements;
 
   override def extendWith(other: Weight): Weight = {
-    if (other == one) return this
-    if (this == one) return other
-    if (other == zero || this == zero) {
-      return zero
+    if (other == one()) return this
+    if (this == one()) return other
+    if (other == zero() || this == zero()) {
+      return zero()
     }
-    val func: TransitionFunction = other.asInstanceOf[TransitionFunction]
-    val otherTransitions: Set[ITransition] = func.value
-    val ress: Set[ITransition] = new HashSet[ITransition]()
-    val newStateChangeStatements: Set[Edge] = new HashSet[Edge]()
+    val func = other.asInstanceOf[TransitionFunction]
+    val otherTransitions = func.value
+    val ress = new HashSet[ITransition]()
+    val newStateChangeStatements = new HashSet[Edge]()
     for (first <- value) {
       for (second <- otherTransitions) {
-        if (second == Transition.identity) {
+        if (second == Transition.identity()) {
           ress.add(first)
-          newStateChangeStatements.addAll(stateChangeStatementsVar)
-        } else if (first == Transition.identity) {
+          newStateChangeStatements.addAll(stateChangeStatements)
+        } else if (first == Transition.identity()) {
           ress.add(second)
-          newStateChangeStatements.addAll(func.stateChangeStatementsVar)
-        } else if (first.to == second.from) {
-          ress.add(new Transition(first.from, second.to))
-          newStateChangeStatements.addAll(func.stateChangeStatementsVar)
+          newStateChangeStatements.addAll(func.stateChangeStatements)
+        } else if (first.to() == second.from()) {
+          ress.add(new Transition(first.from(), second.to()))
+          newStateChangeStatements.addAll(func.stateChangeStatements)
         }
       }
     }
     new TransitionFunction(ress, newStateChangeStatements)
-  }
+  };
 
   override def combineWith(other: Weight): Weight = {
     if (!other.isInstanceOf[TransitionFunction]) throw new RuntimeException()
-    if (this == zero) return other
-    if (other == zero) return this
-    if (other == one && this == one) {
-      return one
+    if (this == zero()) return other
+    if (other == zero()) return this
+    if (other == one() && this == one()) {
+      return one()
     }
-    val func: TransitionFunction = other.asInstanceOf[TransitionFunction]
-    if (other == one || this == one) {
-      val transitions: Set[ITransition] = new HashSet[ITransition](if (other == one) value else func.value)
-      val idTransitions: Set[ITransition] = Sets.newHashSet[ITransition]()
+    val func = other.asInstanceOf[TransitionFunction]
+    if (other == one() || this == one()) {
+      val transitions = new HashSet[ITransition](if (other == one()) value else func.value)
+      val idTransitions = Sets.newHashSet[ITransition]()
       for (t <- transitions) {
-        idTransitions.add(new Transition(t.from, t.from))
+        idTransitions.add(new Transition(t.from(), t.from()))
       }
       transitions.addAll(idTransitions)
       return new TransitionFunction(
         transitions,
-        Sets.newHashSet(if (other == one) stateChangeStatementsVar else func.stateChangeStatementsVar)
-      )
+        Sets.newHashSet(if (other == one()) stateChangeStatements else func.stateChangeStatements))
     }
-    val transitions: Set[ITransition] = new HashSet[ITransition](func.value)
+    val transitions = new HashSet[ITransition](func.value)
     transitions.addAll(value)
-    val newStateChangeStmts: HashSet[Edge] = Sets.newHashSet(stateChangeStatementsVar)
-    newStateChangeStmts.addAll(func.stateChangeStatementsVar)
+    val newStateChangeStmts = Sets.newHashSet(stateChangeStatements)
+    newStateChangeStmts.addAll(func.stateChangeStatements)
     new TransitionFunction(transitions, newStateChangeStmts)
-  }
+  };
 
   override def toString: String = {
     if (rep != null) return rep
-    s"Weight: $value"
-  }
+    "Weight: " + value.toString + ""
+  };
 
   override def hashCode(): Int = {
-    val prime: Int = 31
-    var result: Int = 1
+    val prime = 31
+    var result = 1
     result = prime * result + (if (rep == null) 0 else rep.hashCode)
     result = prime * result + (if (value == null) 0 else value.hashCode)
     result
-  }
+  };
 
   override def equals(obj: Any): Boolean = {
-    if (this eq obj.asInstanceOf[AnyRef]) return true
+    if (this == obj) return true
     if (obj == null) return false
     if (getClass != obj.getClass) return false
-    val other: TransitionFunction = obj.asInstanceOf[TransitionFunction]
+    val other = obj.asInstanceOf[TransitionFunction]
     if (rep == null) {
       if (other.rep != null) return false
     } else if (rep != other.rep) return false
