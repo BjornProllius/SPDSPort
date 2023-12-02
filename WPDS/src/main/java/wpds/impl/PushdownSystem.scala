@@ -9,21 +9,17 @@
  * <p>Contributors: Johannes Spaeth - initial API and implementation
  * *****************************************************************************
  */
-package wpds.impl;
+package wpds.impl
 
-import wpds.impl.Weight.NoWeight;
-import wpds.interfaces.Location;
-import wpds.interfaces.State;
+import wpds.interfaces.{Location, State}
 
-public class PushdownSystem<N extends Location, D extends State>
-    extends WeightedPushdownSystem<N, D, NoWeight> {
+class PushdownSystem[N <: Location, D <: State] 
+  extends WeightedPushdownSystem[N, D, NoWeight] {
 
-  @Override
-  public boolean addRule(Rule<N, D, NoWeight> rule) {
-    if (!(rule instanceof UNormalRule)
-        && !(rule instanceof UPopRule)
-        && !(rule instanceof UPushRule))
-      throw new RuntimeException("Trying to add a weighted rule to an unweighted PDS!");
-    return super.addRule(rule);
+  override def addRule(rule: Rule[N, D, NoWeight]): Boolean = {
+    rule match {
+      case _: UNormalRule[_, _] | _: UPopRule[_, _] | _: UPushRule[_, _, _] => super.addRule(rule)
+      case _ => throw new RuntimeException("Trying to add a weighted rule to an unweighted PDS!")
+    }
   }
 }

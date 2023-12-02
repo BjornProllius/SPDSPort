@@ -9,10 +9,10 @@
  * <p>Contributors: Johannes Spaeth - initial API and implementation
  * *****************************************************************************
  */
-package typestate.finiteautomata;
+package wpds.debug;
 
-public interface ITransition {
-  public State from();
+import wpds.impl.Weight;
+import wpds.interfaces.Location;
+import wpds.interfaces.State;
 
-  public State to();
-}
+public interface Debugger<N extends Location, D extends State, W extends Weight> {}
