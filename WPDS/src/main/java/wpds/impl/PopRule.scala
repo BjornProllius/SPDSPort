@@ -1,27 +1,11 @@
-/**
- * ***************************************************************************** Copyright (c) 2018
- * Fraunhofer IEM, Paderborn, Germany. This program and the accompanying materials are made
- * available under the terms of the Eclipse Public License 2.0 which is available at
- * http://www.eclipse.org/legal/epl-2.0.
- *
- * <p>SPDX-License-Identifier: EPL-2.0
- *
- * <p>Contributors: Johannes Spaeth - initial API and implementation
- * *****************************************************************************
- */
-package wpds.impl;
+package wpds.impl
 
-import wpds.interfaces.Location;
-import wpds.interfaces.State;
+import wpds.interfaces.Location
+import wpds.interfaces.State
+import wpds.interfaces.Weight
 
-public class PopRule<N extends Location, D extends State, W extends Weight> extends Rule<N, D, W> {
+class PopRule[N <: Location, D <: State, W <: Weight](s1: D, l1: N, s2: D, w: W) 
+  extends Rule[N, D, W](s1, l1, s2, null.asInstanceOf[N], w) {
 
-  public PopRule(D s1, N l1, D s2, W w) {
-    super(s1, l1, s2, null, w);
-  }
-
-  @Override
-  public String toString() {
-    return "<" + s1 + ";" + l1 + ">-><" + s2 + ">(" + w + ")";
-  }
+  override def toString: String = s"<$s1;$l1>-><$s2>($w)"
 }
