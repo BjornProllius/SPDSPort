@@ -34,16 +34,23 @@ public class Configuration<N extends Location, D extends State> {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
     Configuration other = (Configuration) obj;
     if (location == null) {
-      if (other.location != null) return false;
-    } else if (!location.equals(other.location)) return false;
+      if (other.location != null)
+        return false;
+    } else if (!location.equals(other.location))
+      return false;
     if (state == null) {
-      if (other.state != null) return false;
-    } else if (!state.equals(other.state)) return false;
+      if (other.state != null)
+        return false;
+    } else if (!state.equals(other.state))
+      return false;
     return true;
   }
 }
