@@ -9,3 +9,4 @@ bin/
 surefire-reports/
 shippable/
 *.prefs
+.metals/
