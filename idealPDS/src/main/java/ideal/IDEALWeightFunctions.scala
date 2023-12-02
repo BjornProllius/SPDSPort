@@ -80,7 +80,7 @@ class IDEALWeightFunctions[W <: Weight](
     println(s"Alias flow detected $source $target")
     indirectAlias.put(source, target)
   }
-
+ 
   def getAliasesFor(node: Node[Edge, Val]): Collection[Node[Edge, Val]] = {
     indirectAlias.get(node).asScala
   }
