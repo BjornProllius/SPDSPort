@@ -1,48 +1,31 @@
-package boomerang.results;
+package boomerang.results
 
-import boomerang.Query;
-import boomerang.scene.ControlFlowGraph;
-import boomerang.scene.Field;
-import boomerang.scene.Method;
-import boomerang.scene.Pair;
-import boomerang.scene.Statement;
-import boomerang.scene.Val;
-import java.util.List;
-import sync.pds.solver.nodes.INode;
-import sync.pds.solver.nodes.Node;
-import wpds.impl.PAutomaton;
+import boomerang.Query
+import boomerang.scene.ControlFlowGraph
+import boomerang.scene.Field
+import boomerang.scene.Method
+import boomerang.scene.Pair
+import boomerang.scene.Statement
+import boomerang.scene.Val
+import sync.pds.solver.nodes.INode
+import sync.pds.solver.nodes.Node
+import wpds.impl.PAutomaton
 
-public class NullPointerDereference implements AffectedLocation {
-  public static final int RULE_INDEX = 0;
+class NullPointerDereference(
+    var query: Query,
+    val statement: ControlFlowGraph.Edge,
+    val variable: Val,
+    var openingContext: PAutomaton[Statement, INode[Val]],
+    var closingContext: PAutomaton[Statement, INode[Val]],
+    var dataFlowPath: List[PathElement]
+) extends AffectedLocation {
 
-  private final ControlFlowGraph.Edge statement;
-  private final Val variable;
-  private PAutomaton<Statement, INode<Val>> openingContext;
-  private PAutomaton<Statement, INode<Val>> closingContext;
-  private List<PathElement> dataFlowPath;
-  private final ControlFlowGraph.Edge sourceStatement;
-  private final Val sourceVariable;
-  private Query query;
+  val RULE_INDEX: Int = 0
+  val sourceStatement: ControlFlowGraph.Edge = query.cfgEdge()
+  val sourceVariable: Val = query.`var`()
 
-  public NullPointerDereference(ControlFlowGraph.Edge statement) {
-    this(null, statement, null, null, null, null);
-  }
-
-  public NullPointerDereference(
-      Query query,
-      ControlFlowGraph.Edge statement,
-      Val variable,
-      PAutomaton<Statement, INode<Val>> openingContext,
-      PAutomaton<Statement, INode<Val>> closingContext,
-      List<PathElement> dataFlowPath) {
-    this.query = query;
-    this.sourceStatement = query.cfgEdge();
-    this.sourceVariable = query.var();
-    this.statement = statement;
-    this.variable = variable;
-    this.openingContext = openingContext;
-    this.closingContext = closingContext;
-    this.dataFlowPath = dataFlowPath;
+  def this(statement: ControlFlowGraph.Edge) {
+    this(null, statement, null, null, null, null)
   }
 
   /**
@@ -51,46 +34,35 @@ public class NullPointerDereference implements AffectedLocation {
    *
    * @return the variable that contains a null pointer
    */
-  public Val getVariable() {
-    return variable;
-  }
+  def getVariable(): Val = variable
 
-  @Override
-  public List<PathElement> getDataFlowPath() {
-    return dataFlowPath;
-  }
+  override def getDataFlowPath(): List[PathElement] = dataFlowPath
 
-  @Override
-  public String getMessage() {
-    return "Potential **null pointer** dereference";
-  }
+  override def getMessage(): String = "Potential **null pointer** dereference"
 
-  @Override
-  public int getRuleIndex() {
-    return RULE_INDEX;
-  }
+  override def getRuleIndex(): Int = RULE_INDEX
 
   /**
    * The statement at which a null pointer occurred.
    *
-   * <p>A null pointer can occur at three different types of statements: y = x.toString(); or y =
+   * A null pointer can occur at three different types of statements: y = x.toString(); or y =
    * lengthof(x); or y = x.f;
    *
    * @return the statement where the respective {@link #getVariable() getVariable} is null
    */
-  public ControlFlowGraph.Edge getStatement() {
-    return statement;
+  def getStatement(): ControlFlowGraph.Edge = {
+    statement
   }
 
   /**
    * The source statement of the data-flow, i.e., the statement that assigns null to a variable.
    *
-   * <p>Examples are: x = null or x = System.getProperty(...).
+   * Examples are: x = null or x = System.getProperty(...).
    *
    * @return The source statement of the data-flow/null pointer.
    */
-  public ControlFlowGraph.Edge getSourceStatement() {
-    return sourceStatement;
+  def getSourceStatement(): ControlFlowGraph.Edge = {
+    sourceStatement
   }
 
   /**
@@ -99,8 +71,8 @@ public class NullPointerDereference implements AffectedLocation {
    *
    * @return The source variable of the data-flow propagation
    */
-  public Val getSourceVariable() {
-    return sourceVariable;
+  def getSourceVariable(): Val = {
+    sourceVariable
   }
 
   /**
@@ -108,8 +80,8 @@ public class NullPointerDereference implements AffectedLocation {
    *
    * @return The SootMethod of the null pointer statement
    */
-  public Method getMethod() {
-    return getStatement().getStart().getMethod();
+  def getMethod(): Method = {
+    getStatement().getStart().getMethod()
   }
 
   /**
@@ -137,8 +109,8 @@ public class NullPointerDereference implements AffectedLocation {
    *
    * @return The automaton representation of the opening context.
    */
-  public PAutomaton<Statement, INode<Val>> getOpeningContext() {
-    return openingContext;
+  def getOpeningContext(): PAutomaton[Statement, INode[Val]] = {
+    openingContext
   }
 
   /**
@@ -171,53 +143,52 @@ public class NullPointerDereference implements AffectedLocation {
    *
    * @return The automaton representation of the closing context.
    */
-  public PAutomaton<Statement, INode<Val>> getClosingContext() {
-    return closingContext;
+  def getClosingContext(): PAutomaton[Statement, INode[Val]] = {
+    closingContext
   }
 
-  @Override
-  public String toString() {
-    String str = "Null Pointer: \n";
-    str += "defined at " + getSourceStatement().getStart().getMethod();
-    str += (getVariable() != null ? "\tVariable: " + getVariable() : "");
-    str += "\n\tStatement: " + getStatement() + "\n\tMethod: " + getMethod();
-    return str;
+  override def toString(): String = {
+    var str = "Null Pointer: \n"
+    str += "defined at " + getSourceStatement().getStart().getMethod()
+    str += (if (getVariable() != null) "\tVariable: " + getVariable() else "")
+    str += "\n\tStatement: " + getStatement() + "\n\tMethod: " + getMethod()
+    str
   }
 
-  public Query getQuery() {
-    return query;
+  def getQuery(): Query = {
+    query
   }
 
-  public static boolean isNullPointerNode(Node<ControlFlowGraph.Edge, Val> nullPointerNode) {
-    Val fact = nullPointerNode.fact();
-    Method m = fact.m();
+  def isNullPointerNode(nullPointerNode: Node[ControlFlowGraph.Edge, Val]): Boolean = {
+    val fact = nullPointerNode.fact()
+    val m = fact.m()
     // A this variable can never be null.
     if (!m.isStatic() && m.getThisLocal().equals(fact)) {
-      return false;
+      return false
     }
-    Statement curr = nullPointerNode.stmt().getStart();
+    val curr = nullPointerNode.stmt().getStart()
     if (curr.containsInvokeExpr()) {
       if (curr.getInvokeExpr().isInstanceInvokeExpr()) {
-        Val invocationBase = curr.getInvokeExpr().getBase();
+        val invocationBase = curr.getInvokeExpr().getBase()
         if (invocationBase.equals(fact)) {
-          return true;
+          return true
         }
       }
     }
     if (curr.isAssign()) {
       if (curr.isFieldLoad()) {
-        Pair<Val, Field> ifr = curr.getFieldLoad();
+        val ifr = curr.getFieldLoad()
         if (ifr.getX().equals(fact)) {
-          return true;
+          return true
         }
       }
       if (curr.getRightOp().isLengthExpr()) {
-        Val lengthOp = curr.getRightOp().getLengthOp();
+        val lengthOp = curr.getRightOp().getLengthOp()
         if (lengthOp.equals(fact)) {
-          return true;
+          return true
         }
       }
     }
-    return false;
+    false
   }
 }
