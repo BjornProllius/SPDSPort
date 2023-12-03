@@ -9,152 +9,134 @@
  * <p>Contributors: Johannes Spaeth - initial API and implementation
  * *****************************************************************************
  */
-package boomerang.stats;
+package boomerang.stats
 
-import boomerang.BackwardQuery;
-import boomerang.ForwardQuery;
-import boomerang.Query;
-import boomerang.WeightedBoomerang;
-import boomerang.results.BackwardBoomerangResults;
-import boomerang.results.ForwardBoomerangResults;
-import boomerang.scene.ControlFlowGraph.Edge;
-import boomerang.scene.Field;
-import boomerang.scene.Field.ArrayField;
-import boomerang.scene.Method;
-import boomerang.scene.Val;
-import boomerang.solver.AbstractBoomerangSolver;
-import boomerang.solver.BackwardBoomerangSolver;
-import boomerang.solver.ForwardBoomerangSolver;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import sync.pds.solver.nodes.INode;
-import sync.pds.solver.nodes.Node;
-import wpds.impl.Rule;
-import wpds.impl.Transition;
-import wpds.impl.Weight;
-import wpds.interfaces.Location;
-import wpds.interfaces.State;
+import boomerang.{BackwardQuery, ForwardQuery, Query, WeightedBoomerang}
+import boomerang.results.{BackwardBoomerangResults, ForwardBoomerangResults}
+import boomerang.scene.ControlFlowGraph.Edge
+import boomerang.scene.{Field, Method, Val}
+import boomerang.solver.{AbstractBoomerangSolver, BackwardBoomerangSolver, ForwardBoomerangSolver}
+import com.google.common.collect.{Maps, Sets}
 
-public class AdvancedBoomerangStats<W extends Weight> implements IBoomerangStats<W> {
+import scala.collection.mutable
+import sync.pds.solver.nodes.{INode, Node}
+import wpds.impl.{Rule, Transition, Weight}
+import wpds.interfaces.{Location, State}
 
-  private Map<Query, AbstractBoomerangSolver<W>> queries = Maps.newHashMap();
-  private Set<WeightedTransition<Field, INode<Node<Edge, Val>>, W>> globalFieldTransitions =
-      Sets.newHashSet();
-  private int fieldTransitionCollisions;
-  private Set<WeightedTransition<Edge, INode<Val>, W>> globalCallTransitions = Sets.newHashSet();
-  private int callTransitionCollisions;
-  private Set<Rule<Field, INode<Node<Edge, Val>>, W>> globalFieldRules = Sets.newHashSet();
-  private int fieldRulesCollisions;
-  private Set<Rule<Edge, INode<Val>, W>> globalCallRules = Sets.newHashSet();
-  private int callRulesCollisions;
-  private Set<Node<Edge, Val>> reachedForwardNodes = Sets.newHashSet();
-  private int reachedForwardNodeCollisions;
+class AdvancedBoomerangStats[W <: Weight] extends IBoomerangStats[W] {
 
-  private Set<Node<Edge, Val>> reachedBackwardNodes = Sets.newHashSet();
-  private int reachedBackwardNodeCollisions;
-  private Set<Method> callVisitedMethods = Sets.newHashSet();
-  private Set<Method> fieldVisitedMethods = Sets.newHashSet();
-  private int arrayFlows;
-  private int staticFlows;
-  private boolean COUNT_TOP_METHODS = false;
-  private Map<String, Integer> backwardFieldMethodsRules = new TreeMap<>();
-  private Map<String, Integer> backwardCallMethodsRules = new TreeMap<>();
+  private var queries: Map[Query, AbstractBoomerangSolver[W]] = Maps.newHashMap()
+  private var globalFieldTransitions: Set[WeightedTransition[Field, INode[Node[Edge, Val]], W]] = Sets.newHashSet()
+  private var fieldTransitionCollisions: Int = 0
+  private var globalCallTransitions: Set[WeightedTransition[Edge, INode[Val], W]] = Sets.newHashSet()
+  private var callTransitionCollisions: Int = 0
+  private var globalFieldRules: Set[Rule[Field, INode[Node[Edge, Val]], W]] = Sets.newHashSet()
+  private var fieldRulesCollisions: Int = 0
+  private var globalCallRules: Set[Rule[Edge, INode[Val], W]] = Sets.newHashSet()
+  private var callRulesCollisions: Int = 0
+  private var reachedForwardNodes: Set[Node[Edge, Val]] = Sets.newHashSet()
+  private var reachedForwardNodeCollisions: Int = 0
 
-  private Map<String, Integer> forwardFieldMethodsRules = new TreeMap<>();
-  private Map<String, Integer> forwardCallMethodsRules = new TreeMap<>();
+  private var reachedBackwardNodes: Set[Node[Edge, Val]] = Sets.newHashSet()
+  private var reachedBackwardNodeCollisions: Int = 0
+  private var callVisitedMethods: Set[Method] = Sets.newHashSet()
+  private var fieldVisitedMethods: Set[Method] = Sets.newHashSet()
+  private var arrayFlows: Int = 0
+  private var staticFlows: Int = 0
+  private var COUNT_TOP_METHODS: Boolean = false
+  private var backwardFieldMethodsRules: Map[String, Int] = new TreeMap()
+  private var backwardCallMethodsRules: Map[String, Int] = new TreeMap()
 
-  public static <K> Map<K, Integer> sortByValues(final Map<K, Integer> map) {
-    Comparator<K> valueComparator =
-        (k1, k2) -> {
-          if (map.get(k2) > map.get(k1)) return 1;
-          else return -1;
-        };
-    Map<K, Integer> sortedByValues = new TreeMap<K, Integer>(valueComparator);
-    sortedByValues.putAll(map);
-    return sortedByValues;
-  }
+  private var forwardFieldMethodsRules: Map[String, Int] = new TreeMap()
+  private var forwardCallMethodsRules: Map[String, Int] = new TreeMap()
 
-  @Override
-  public void registerSolver(Query key, final AbstractBoomerangSolver<W> solver) {
-    if (queries.containsKey(key)) {
-      return;
+  def sortByValues[K](map: Map[K, Int]): Map[K, Int] = {
+    val valueComparator: Comparator[K] = (k1, k2) => {
+      if (map(k2) > map(k1)) 1
+      else -1
     }
-    queries.put(key, solver);
-    solver
-        .getFieldAutomaton()
-        .registerListener(
-            (t, w, aut) -> {
-              if (!globalFieldTransitions.add(new WeightedTransition<>(t, w))) {
-                fieldTransitionCollisions++;
-              }
-              fieldVisitedMethods.add(t.getStart().fact().stmt().getMethod());
-              if (t.getLabel() instanceof ArrayField) {
-                arrayFlows++;
-              }
-            });
-
-    solver
-        .getCallAutomaton()
-        .registerListener(
-            (t, w, aut) -> {
-              if (!globalCallTransitions.add(new WeightedTransition<>(t, w))) {
-                callTransitionCollisions++;
-              }
-              callVisitedMethods.add(t.getLabel().getMethod());
-
-              if (t.getStart().fact().isStatic()) {
-                staticFlows++;
-              }
-            });
-
-    solver
-        .getFieldPDS()
-        .registerUpdateListener(
-            rule -> {
-              if (!globalFieldRules.add(rule)) {
-                fieldRulesCollisions++;
-              } else if (COUNT_TOP_METHODS) {
-                increaseMethod(
-                    rule.getS1().fact().stmt().getMethod().toString(),
-                    (solver instanceof BackwardBoomerangSolver
-                        ? backwardFieldMethodsRules
-                        : forwardFieldMethodsRules));
-              }
-            });
-    solver
-        .getCallPDS()
-        .registerUpdateListener(
-            rule -> {
-              if (!globalCallRules.add(rule)) {
-                callRulesCollisions++;
-
-              } else if (COUNT_TOP_METHODS) {
-                increaseMethod(
-                    rule.getL1().getMethod().toString(),
-                    (solver instanceof BackwardBoomerangSolver
-                        ? backwardCallMethodsRules
-                        : forwardCallMethodsRules));
-              }
-            });
-
-    solver.registerListener(
-        reachableNode -> {
-          if (solver instanceof ForwardBoomerangSolver) {
-            if (!reachedForwardNodes.add(reachableNode)) {
-              reachedForwardNodeCollisions++;
-            }
-          } else {
-            if (!reachedBackwardNodes.add(reachableNode)) {
-              reachedBackwardNodeCollisions++;
-            }
-          }
-        });
+    val sortedByValues: Map[K, Int] = new TreeMap[K, Int](valueComparator)
+    sortedByValues.putAll(map)
+    sortedByValues
   }
+
+  override def registerSolver(key: Query, solver: AbstractBoomerangSolver[W]): Unit = {
+    if (queries.contains(key)) {
+      return
+    }
+    queries.put(key, solver)
+
+    solver.getFieldAutomaton().registerListener((t, w, aut) => {
+      if (!globalFieldTransitions.add(new WeightedTransition(t, w))) {
+        fieldTransitionCollisions += 1
+      }
+      fieldVisitedMethods.add(t.getStart().fact().stmt().getMethod())
+      if (t.getLabel().isInstanceOf[ArrayField]) {
+        arrayFlows += 1
+      }
+    })
+
+    solver.getCallAutomaton().registerListener((t, w, aut) => {
+      if (!globalCallTransitions.add(new WeightedTransition(t, w))) {
+        callTransitionCollisions += 1
+      }
+      callVisitedMethods.add(t.getLabel().getMethod())
+      if (t.getStart().fact().isStatic()) {
+        staticFlows += 1
+      }
+    })
+
+    solver.getFieldPDS().registerUpdateListener(rule => {
+      if (!globalFieldRules.add(rule)) {
+        fieldRulesCollisions += 1
+      } else if (COUNT_TOP_METHODS) {
+        increaseMethod(
+          rule.getS1().fact().stmt().getMethod().toString(),
+          if (solver.isInstanceOf[BackwardBoomerangSolver]) backwardFieldMethodsRules else forwardFieldMethodsRules
+        )
+      }
+    })
+
+    solver.getCallPDS().registerUpdateListener(rule => {
+      if (!globalCallRules.add(rule)) {
+        callRulesCollisions += 1
+      } else if (COUNT_TOP_METHODS) {
+        increaseMethod(
+          rule.getL1().getMethod().toString(),
+          if (solver.isInstanceOf[BackwardBoomerangSolver]) backwardCallMethodsRules else forwardCallMethodsRules
+        )
+      }
+    })
+
+    solver.registerListener(reachableNode => {
+      if (solver.isInstanceOf[ForwardBoomerangSolver]) {
+        if (!reachedForwardNodes.add(reachableNode)) {
+          reachedForwardNodeCollisions += 1
+        }
+      } else {
+        if (!reachedBackwardNodes.add(reachableNode)) {
+          reachedBackwardNodeCollisions += 1
+        }
+      }
+    })
+  }
+
+  
+
+
+
+
+
+
+
+
+
+
+
+}
+
+  
+
 
   private void increaseMethod(String method, Map<String, Integer> map) {
     Integer i = map.get(method);
