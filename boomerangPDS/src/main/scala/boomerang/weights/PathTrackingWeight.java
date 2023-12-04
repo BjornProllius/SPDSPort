@@ -14,12 +14,14 @@ public class PathTrackingWeight extends Weight {
 
   private static PathTrackingWeight one;
   /**
-   * This set keeps track of all statements on a shortest path that use an alias from source to
+   * This set keeps track of all statements on a shortest path that use an alias
+   * from source to
    * sink.
    */
   private LinkedHashSet<Node<Edge, Val>> shortestPathWitness = new LinkedHashSet<>();
   /**
-   * This set keeps track of all statement along all paths that use an alias from source to sink.
+   * This set keeps track of all statement along all paths that use an alias from
+   * source to sink.
    */
   private Set<LinkedHashSet<Node<Edge, Val>>> allPathWitness = Sets.newHashSet();
 
@@ -123,19 +125,28 @@ public class PathTrackingWeight extends Weight {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
     PathTrackingWeight other = (PathTrackingWeight) obj;
     if (shortestPathWitness == null) {
-      if (other.shortestPathWitness != null) return false;
-    } else if (!shortestPathWitness.equals(other.shortestPathWitness)) return false;
+      if (other.shortestPathWitness != null)
+        return false;
+    } else if (!shortestPathWitness.equals(other.shortestPathWitness))
+      return false;
     if (allPathWitness == null) {
-      if (other.allPathWitness != null) return false;
-    } else if (!allPathWitness.equals(other.allPathWitness)) return false;
+      if (other.allPathWitness != null)
+        return false;
+    } else if (!allPathWitness.equals(other.allPathWitness))
+      return false;
     if (rep == null) {
-      if (other.rep != null) return false;
-    } else if (!rep.equals(other.rep)) return false;
+      if (other.rep != null)
+        return false;
+    } else if (!rep.equals(other.rep))
+      return false;
     return true;
   }
 
