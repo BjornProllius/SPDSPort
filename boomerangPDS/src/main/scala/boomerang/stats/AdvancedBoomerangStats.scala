@@ -121,184 +121,113 @@ class AdvancedBoomerangStats[W <: Weight] extends IBoomerangStats[W] {
     })
   }
 
-  
-
-
-
-
-
-
-
-
-
-
-
-}
-
-  
-
-
-  private void increaseMethod(String method, Map<String, Integer> map) {
-    Integer i = map.get(method);
-    if (i == null) {
-      i = new Integer(0);
-    }
-    map.put(method, ++i);
+  private def increaseMethod(method: String, map: mutable.Map[String, Int]): Unit = {
+    val i = map.getOrElse(method, 0)
+    map.put(method, i + 1)
   }
 
-  @Override
-  public void registerFieldWritePOI(WeightedBoomerang<W>.FieldWritePOI key) {}
+  override def registerFieldWritePOI(key: WeightedBoomerang[W]#FieldWritePOI): Unit = {}
 
-  public String toString() {
-    String s = "=========== Boomerang Stats =============\n";
-    int forwardQuery = 0;
-    int backwardQuery = 0;
-    for (Query q : queries.keySet()) {
-      if (q instanceof ForwardQuery) {
-        forwardQuery++;
-      } else backwardQuery++;
+  override def toString: String = {
+    var s = "=========== Boomerang Stats =============\n"
+    var forwardQuery = 0
+    var backwardQuery = 0
+    for (q <- queries.keySet) {
+      if (q.isInstanceOf[ForwardQuery]) {
+        forwardQuery += 1
+      } else backwardQuery += 1
     }
-    s +=
-        String.format(
-            "Queries (Forward/Backward/Total): \t\t %s/%s/%s\n",
-            forwardQuery, backwardQuery, queries.keySet().size());
-    s +=
-        String.format(
-            "Visited Methods (Field/Call): \t\t %s/%s\n",
-            fieldVisitedMethods.size(), callVisitedMethods.size());
-    s +=
-        String.format(
-            "Reached Forward Nodes(Collisions): \t\t %s (%s)\n",
-            reachedForwardNodes.size(), reachedForwardNodeCollisions);
-    s +=
-        String.format(
-            "Reached Backward Nodes(Collisions): \t\t %s (%s)\n",
-            reachedBackwardNodes.size(), reachedBackwardNodeCollisions);
-    s +=
-        String.format(
-            "Global Field Rules(Collisions): \t\t %s (%s)\n",
-            globalFieldRules.size(), fieldRulesCollisions);
-    s +=
-        String.format(
-            "Global Field Transitions(Collisions): \t\t %s (%s)\n",
-            globalFieldTransitions.size(), fieldTransitionCollisions);
-    s +=
-        String.format(
-            "Global Call Rules(Collisions): \t\t %s (%s)\n",
-            globalCallRules.size(), callRulesCollisions);
-    s +=
-        String.format(
-            "Global Call Transitions(Collisions): \t\t %s (%s)\n",
-            globalCallTransitions.size(), callTransitionCollisions);
-    s +=
-        String.format(
-            "Special Flows (Static/Array): \t\t %s(%s)/%s(%s)\n",
-            staticFlows, globalCallTransitions.size(), arrayFlows, globalFieldTransitions.size());
+    s += f"Queries (Forward/Backward/Total): \t\t $forwardQuery/$backwardQuery/${queries.keySet.size}\n"
+    s += f"Visited Methods (Field/Call): \t\t ${fieldVisitedMethods.size}/${callVisitedMethods.size}\n"
+    s += f"Reached Forward Nodes(Collisions): \t\t ${reachedForwardNodes.size} ($reachedForwardNodeCollisions)\n"
+    s += f"Reached Backward Nodes(Collisions): \t\t ${reachedBackwardNodes.size} ($reachedBackwardNodeCollisions)\n"
+    s += f"Global Field Rules(Collisions): \t\t ${globalFieldRules.size} ($fieldRulesCollisions)\n"
+    s += f"Global Field Transitions(Collisions): \t\t ${globalFieldTransitions.size} ($fieldTransitionCollisions)\n"
+    s += f"Global Call Rules(Collisions): \t\t ${globalCallRules.size} ($callRulesCollisions)\n"
+    s += f"Global Call Transitions(Collisions): \t\t ${globalCallTransitions.size} ($callTransitionCollisions)\n"
+    s += f"Special Flows (Static/Array): \t\t $staticFlows(${globalCallTransitions.size})/$arrayFlows(${globalFieldTransitions.size})\n"
     if (COUNT_TOP_METHODS) {
-      s += topMostMethods(forwardFieldMethodsRules, "forward field");
-      s += topMostMethods(forwardCallMethodsRules, "forward call");
-
-      if (!backwardCallMethodsRules.isEmpty()) {
-        s += topMostMethods(backwardFieldMethodsRules, "backward field");
-        s += topMostMethods(backwardCallMethodsRules, "backward call");
+      s += topMostMethods(forwardFieldMethodsRules, "forward field")
+      s += topMostMethods(forwardCallMethodsRules, "forward call")
+      if (backwardCallMethodsRules.nonEmpty) {
+        s += topMostMethods(backwardFieldMethodsRules, "backward field")
+        s += topMostMethods(backwardCallMethodsRules, "backward call")
       }
     }
-    s += computeMetrics();
-    s += "\n";
-    return s;
+    s += computeMetrics()
+    s += "\n"
+    s
   }
 
-  private String topMostMethods(Map<String, Integer> fieldMethodsRules, String system) {
-    Map<String, Integer> sootMethodIntegerMap = sortByValues(fieldMethodsRules);
-    int i = 0;
-    String s = "";
-    for (Map.Entry<String, Integer> e : sootMethodIntegerMap.entrySet()) {
-      if (++i > 11) break;
-      s +=
-          String.format(
-              "%s. most %s visited Method(%sx): %s\n", i, system, e.getValue(), e.getKey());
+  private def topMostMethods(fieldMethodsRules: mutable.Map[String, Int], system: String): String = {
+    val sootMethodIntegerMap = sortByValues(fieldMethodsRules)
+    var i = 0
+    var s = ""
+    for ((key, value) <- sootMethodIntegerMap) {
+      i += 1
+      if (i > 11) return s
+      s += f"$i. most $system visited Method(${value}x): $key\n"
     }
-    return s;
+    s
   }
 
-  @Override
-  public Set<Method> getCallVisitedMethods() {
-    return Sets.newHashSet(callVisitedMethods);
+  override def getCallVisitedMethods: Set[Method] = {
+    callVisitedMethods.toSet
   }
 
-  private String computeMetrics() {
-    int min = Integer.MAX_VALUE;
-    int totalReached = 0;
-    int max = 0;
-    Query maxQuery = null;
-    for (Query q : queries.keySet()) {
-      int size = queries.get(q).getReachedStates().size();
-      totalReached += size;
-      min = Math.min(size, min);
+  private def computeMetrics(): String = {
+    var min = Int.MaxValue
+    var totalReached = 0
+    var max = 0
+    var maxQuery: Query = null
+    for (q <- queries.keySet) {
+      val size = queries(q).getReachedStates.size
+      totalReached += size
+      min = Math.min(size, min)
       if (size > max) {
-        maxQuery = q;
+        maxQuery = q
       }
-      max = Math.max(size, max);
+      max = Math.max(size, max)
     }
-    float average = ((float) totalReached) / queries.keySet().size();
-    String s = String.format("Reachable nodes (Min/Avg/Max): \t\t%s/%s/%s\n", min, average, max);
-    s += String.format("Maximal Query: \t\t%s\n", maxQuery);
-    return s;
+    val average = totalReached.toFloat / queries.keySet.size
+    var s = f"Reachable nodes (Min/Avg/Max): \t\t$min/$average/$max\n"
+    s += f"Maximal Query: \t\t$maxQuery\n"
+    s
   }
 
-  private static class WeightedTransition<X extends Location, Y extends State, W> {
-    final Transition<X, Y> t;
-    final W w;
-
-    public WeightedTransition(Transition<X, Y> t, W w) {
-      this.t = t;
-      this.w = w;
+  private class WeightedTransition[X <: Location, Y <: State, W](val t: Transition[X, Y], val w: W) {
+    override def hashCode(): Int = {
+      val prime = 31
+      var result = 1
+      result = prime * result + (if (t == null) 0 else t.hashCode())
+      result = prime * result + (if (w == null) 0 else w.hashCode())
+      result
     }
 
-    @Override
-    public int hashCode() {
-      final int prime = 31;
-      int result = 1;
-      result = prime * result + ((t == null) ? 0 : t.hashCode());
-      result = prime * result + ((w == null) ? 0 : w.hashCode());
-      return result;
+    override def equals(obj: Any): Boolean = obj match {
+      case that: WeightedTransition[X, Y, W] =>
+        (that canEqual this) &&
+          t == that.t &&
+          w == that.w
+      case _ => false
     }
 
-    @Override
-    public boolean equals(Object obj) {
-      if (this == obj) return true;
-      if (obj == null) return false;
-      if (getClass() != obj.getClass()) return false;
-      WeightedTransition other = (WeightedTransition) obj;
-      if (t == null) {
-        if (other.t != null) return false;
-      } else if (!t.equals(other.t)) return false;
-      if (w == null) {
-        if (other.w != null) return false;
-      } else if (!w.equals(other.w)) return false;
-      return true;
-    }
+    def canEqual(other: Any): Boolean = other.isInstanceOf[WeightedTransition[X, Y, W]]
   }
 
-  @Override
-  public Collection<? extends Node<Edge, Val>> getForwardReachesNodes() {
-    Set<Node<Edge, Val>> res = Sets.newHashSet();
-    for (Query q : queries.keySet()) {
-      if (q instanceof ForwardQuery) res.addAll(queries.get(q).getReachedStates());
+  override def getForwardReachesNodes: Collection[_ <: Node[Edge, Val]] = {
+    val res = mutable.HashSet[Node[Edge, Val]]()
+    for (q <- queries.keySet) {
+      if (q.isInstanceOf[ForwardQuery]) res ++= queries(q).getReachedStates
     }
-    return res;
+    res
   }
 
-  @Override
-  public void terminated(ForwardQuery query, ForwardBoomerangResults<W> forwardBoomerangResults) {
+  override def terminated(query: ForwardQuery, forwardBoomerangResults: ForwardBoomerangResults[W]): Unit = {
     // TODO Auto-generated method stub
-
   }
 
-  @Override
-  public void terminated(
-      BackwardQuery query, BackwardBoomerangResults<W> backwardBoomerangResults) {
+  override def terminated(query: BackwardQuery, backwardBoomerangResults: BackwardBoomerangResults[W]): Unit = {
     // TODO Auto-generated method stub
-
   }
 }
