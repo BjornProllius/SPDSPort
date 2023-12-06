@@ -45,7 +45,7 @@ abstract class StackListener[N <: Location, D <: State, W <: Weight](weightedPAu
     }
 
 
-    private class SubStackListener(state: D, parent: StackListener) extends WPAStateListener[N, D, W](state) {
+    private class SubStackListener(state: D, val parent: StackListener[N, D, W]) extends WPAStateListener[N, D, W](state) {
 
         override def onOutTransitionAdded(t: Transition[N, D], w: W, weightedPAutomaton: WeightedPAutomaton[N, D, W]): Unit = {
             if (t.getLabel == aut.epsilon) return
