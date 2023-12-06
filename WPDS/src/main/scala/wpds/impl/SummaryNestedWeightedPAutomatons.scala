@@ -12,7 +12,7 @@
 package wpds.impl
 
 import scala.collection.mutable
-import wpds.interfaces.{Location, State, Weight}
+import wpds.interfaces.{Location, State}
 
 class SummaryNestedWeightedPAutomatons[N <: Location, D <: State, W <: Weight] extends NestedWeightedPAutomatons[N, D, W] {
 
