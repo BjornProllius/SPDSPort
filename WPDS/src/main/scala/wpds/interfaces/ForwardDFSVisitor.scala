@@ -14,27 +14,26 @@ package wpds.interfaces
 import com.google.common.collect.{HashBasedTable, HashMultimap, Lists, Multimap, Table}
 import java.util.LinkedList
 import wpds.impl.{Transition, Weight, WeightedPAutomaton}
+import scala.jdk.CollectionConverters._
 
-class ForwardDFSVisitor[N <: Location, D <: State, W <: Weight] extends WPAUpdateListener[N, D, W] {
+class ForwardDFSVisitor[N <: Location, D <: State, W <: Weight](var aut: WeightedPAutomaton[N, D, W]) extends WPAUpdateListener[N, D, W] {
     private val listeners = HashMultimap.create[D, ReachabilityListener[N, D]]()
-    protected var aut: WeightedPAutomaton[N, D, W] = _
     private val adjacent = HashMultimap.create[D, D]()
     private val reaches = HashMultimap.create[D, D]()
     private val inverseReaches = HashMultimap.create[D, D]()
     private val refCount = HashBasedTable.create[D, D, Integer]()
+  
 
-    class ForwardDFSVisitor[N <: Location, D <: State, W <: Weight](var aut: WeightedPAutomaton[N, D, W]) {
-        this()
-        this.aut = aut
-    }
+
 
     def registerListener(state: D, l: ReachabilityListener[N, D]): Unit = {
         if (listeners.put(state, l)) {
-            for (d <- Lists.newArrayList(inverseReaches.get(state))) {
+            Lists.newArrayList(inverseReaches.get(state)).asScala.foreach { d =>
                 aut.registerListener(new TransitiveClosure(d, state, l))
             }
         }
     }
+
 
     private class TransitiveClosure(state: D, var s: D, var listener: ReachabilityListener[N, D]) extends WPAStateListener[N, D, W](state) {
 
@@ -96,7 +95,7 @@ class ForwardDFSVisitor[N <: Location, D <: State, W <: Weight] extends WPAUpdat
         }
         makeEdge(a, b)
 
-        for (x <- Lists.newArrayList(reaches.get(a))) {
+        Lists.newArrayList(reaches.get(a)).asScala.foreach { x =>
             if (refCount.get(x, b) == null) {
                 makeClosure(x, b)
                 worklist.add(new Edge(x, b))
@@ -107,7 +106,7 @@ class ForwardDFSVisitor[N <: Location, D <: State, W <: Weight] extends WPAUpdat
             val e = worklist.poll()
             val x = e.from
             val y = e.to
-            for (z <- Lists.newArrayList(adjacent.get(y))) {
+            Lists.newArrayList(adjacent.get(y)).asScala.foreach { z =>
                 if (refCount.get(x, z) == null) {
                     makeClosure(x, z)
                     worklist.add(new Edge(x, z))
@@ -116,7 +115,6 @@ class ForwardDFSVisitor[N <: Location, D <: State, W <: Weight] extends WPAUpdat
             }
         }
     }
-
     private def makeEdge(from: D, to: D): Unit = {
         adjacent.put(from, to)
         inverseReaches(from, to)
@@ -124,7 +122,7 @@ class ForwardDFSVisitor[N <: Location, D <: State, W <: Weight] extends WPAUpdat
 
     private def inverseReaches(from: D, to: D): Unit = {
         if (inverseReaches.put(from, to)) {
-            for (l <- Lists.newArrayList(listeners.get(from))) {
+            Lists.newArrayList(listeners.get(from)).asScala.foreach { l =>
                 aut.registerListener(new TransitiveClosure(to, from, l))
             }
         }
