@@ -245,50 +245,49 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
     }
 
     def getNodes: HashSet[D] = getStates
-
-    def addWeightForTransition(trans: Transition[N, D], weight: W): Boolean = {
-        if (weight == null) throw new IllegalArgumentException("Weight must not be null!")
-        if (trans.getStart.equals(trans.getTarget) && trans.getLabel.equals(epsilon)) {
-            failedAdditions += 1
+def addWeightForTransition(trans: Transition[N, D], weight: W): Boolean = {
+    if (weight == null) throw new IllegalArgumentException("Weight must not be null!")
+    if (trans.getStart.equals(trans.getTarget) && trans.getLabel.equals(epsilon)) {
+        failedAdditions += 1
+        false
+    } else {
+        val distanceToInitial = computeDistance(trans)
+        if (hasMaxDepth && distanceToInitial > getMaxDepth) {
             false
         } else {
-            val distanceToInitial = computeDistance(trans)
-            if (hasMaxDepth && distanceToInitial > getMaxDepth) {
-                false
-            } else {
-                if (!watch.isRunning) {
-                    watch.start()
-                }
-                transitionsOutOf(trans.getStart).add(trans)
-                transitionsInto(trans.getTarget).add(trans)
-                if (states.add(trans.getTarget)) {
-                    stateCreatingTransition.put(trans.getTarget, trans)
-                }
-                states.add(trans.getStart)
-                var added = transitions.add(trans)
-                val oldWeight = transitionToWeights(trans)
-                val newWeight = if (oldWeight == null) weight else oldWeight.combineWith(weight)
-
-                if (!newWeight.equals(oldWeight)) {
-                    transitionToWeights.put(trans, newWeight)
-
-                    for (l <- listeners.toList) {
-                        l.onWeightAdded(trans, newWeight, this)
-                    }
-                    for (l <- stateListeners(trans.getStart).toList) {
-                        l.onOutTransitionAdded(trans, newWeight, this)
-                    }
-                    for (l <- stateListeners(trans.getTarget).toList) {
-                        l.onInTransitionAdded(trans, newWeight, this)
-                    }
-                    added = true
-                }
-                if (watch.isRunning) watch.stop()
-                if (!added) failedAdditions += 1
-                added
+            if (!watch.isRunning) {
+                watch.start()
             }
+            transitionsOutOf(trans.getStart).add(trans)
+            transitionsInto(trans.getTarget).add(trans)
+            if (states.add(trans.getTarget)) {
+                stateCreatingTransition.put(trans.getTarget, trans)
+            }
+            states.add(trans.getStart)
+            var added = transitions.add(trans)
+            val oldWeight = transitionToWeights(trans)
+            val newWeight = if (oldWeight == null) weight else oldWeight.combineWith(weight).asInstanceOf[W]
+
+            if (!newWeight.equals(oldWeight)) {
+                transitionToWeights.put(trans, newWeight)
+
+                for (l <- listeners.toList) {
+                    l.onWeightAdded(trans, newWeight, this)
+                }
+                for (l <- stateListeners(trans.getStart).toList) {
+                    l.onOutTransitionAdded(trans, newWeight, this)
+                }
+                for (l <- stateListeners(trans.getTarget).toList) {
+                    l.onInTransitionAdded(trans, newWeight, this)
+                }
+                added = true
+            }
+            if (watch.isRunning) watch.stop()
+            if (!added) failedAdditions += 1
+            added
         }
     }
+}
 
     protected def computeDistance(trans: Transition[N, D]): Int = {
         val distance = if (isUnbalancedState(trans.getTarget)) {
@@ -518,9 +517,12 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
         override def onOutTransitionAdded(t: Transition[N, D], w: W, aut: WeightedPAutomaton[N, D, W]): Unit = {}
 
         override def onInTransitionAdded(t: Transition[N, D], w: W, aut: WeightedPAutomaton[N, D, W]): Unit = {
-            val newWeight = weight.extendWith(w)
+            val newWeight = weight.extendWith(w).asInstanceOf[W]
             val weightAtTarget = transitionsToFinalWeights.get(t)
-            val newVal = if (weightAtTarget == null) newWeight else weightAtTarget.combineWith(newWeight)
+            val newVal = weightAtTarget match {
+                case Some(weight) => weight.combineWith(newWeight).asInstanceOf[W]
+                case None => newWeight
+            }
             transitionsToFinalWeights.put(t, newVal)
             if (isGeneratedState(t.getStart)) {
                 registerListener(new ValueComputationListener(t.getStart, newVal))
