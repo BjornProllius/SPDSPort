@@ -17,14 +17,15 @@ class PreStar[N <: Location, D <: State, W <: Weight] {
     fa = initialAutomaton
 
     for (trans <- Sets.newHashSet(fa.getTransitions).asScala) {
-      val one = fa.getOne()
+      val one = fa.getOne
       fa.addWeightForTransition(trans, one)
     }
-    for (r <- pds.getPopRules()) {
+    for (r <- pds.getPopRules) {
       update(
-        new Transition[N, D](r.getS1(), r.getL1(), r.getS2()),
-        r.getWeight(),
-        List[Transition[N, D]]())
+        new Transition[N, D](r.getS1, r.getL1, r.getS2),
+        r.getWeight,
+        List[Transition[N, D]]()
+      )
     }
 
     while (worklist.nonEmpty) {
@@ -33,7 +34,7 @@ class PreStar[N <: Location, D <: State, W <: Weight] {
       for (r <- pds.getNormalRulesEnding(t.getStart(), t.getLabel())) {
         // Normal rules
         val previous = List(t)
-        update(new Transition[N, D](r.getS1(), r.getL1(), t.getTarget()), r.getWeight(), previous)
+        update(new Transition[N, D](r.getS1, r.getL1, t.getTarget()), r.getWeight, previous)
       }
       for (r <- pds.getPushRulesEnding(t.getStart(), t.getLabel())) {
         // Push rules
@@ -54,18 +55,17 @@ class PreStar[N <: Location, D <: State, W <: Weight] {
         }
       }
 
-      for (r <- pds.getPushRules()) {
-        if (r.getCallSite().isInstanceOf[Wildcard] || r.getCallSite().equals(t.getLabel())) {
-          val tdash = new Transition[N, D](r.getS2(), r.getL2(), t.getTarget())
-          if (fa.getTransitions().contains(tdash)) {
-            val previous = List(tdash, t)
-            val label = if (r.getCallSite().isInstanceOf[Wildcard]) t.getLabel() else r.getL1()
-            update(new Transition[N, D](r.getS1(), label, t.getTarget()), r.getWeight(), previous)
+      for (r <- pds.getPushRules) {
+        if (r.getCallSite.isInstanceOf[Wildcard] || r.getCallSite.equals(t.getLabel)) {
+          val tdash = new Transition[N, D](r.getS2, r.getL2, t.getTarget)
+          if (fa.getTransitions.contains(tdash)) {
+            val previous = List[Transition[N, D]](tdash, t)
+            val label = if (r.getCallSite.isInstanceOf[Wildcard]) t.getLabel else r.getL1
+            update(new Transition[N, D](r.getS1, label, t.getTarget), r.getWeight, previous)
           }
         }
       }
     }
-
     fa
   }
 

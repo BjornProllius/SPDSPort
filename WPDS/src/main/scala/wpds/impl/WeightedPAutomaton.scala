@@ -6,6 +6,9 @@ import org.slf4j.{Logger, LoggerFactory}
 import pathexpression.{Edge, IRegEx, LabeledGraph, PathExpressionComputer, RegEx}
 import wpds.interfaces._
 
+import scala.collection.mutable.{Set, TreeSet, ListBuffer, HashMap}
+import com.google.common.collect.{Table, HashBasedTable}
+
 import com.google.common.collect._
 import org.slf4j.{Logger, LoggerFactory}
 import pathexpression.LabeledGraph
@@ -55,7 +58,7 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
     }
 
     def addTransition(trans: Transition[N, D]): Boolean = {
-        val addWForTransition: Boolean = addWeightForTransition(trans, getOne())
+        val addWForTransition: Boolean = addWeightForTransition(trans, getOne)
         if (!addWForTransition) {
             failedDirectAdditions += 1
         }
@@ -90,77 +93,80 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
 
     def toDotString: String = toDotString(Set[WeightedPAutomaton[N, D, W]]())
 
-    private def toDotString(visited: Set[WeightedPAutomaton[N, D, W]]): String = {
-        if (!visited.add(this)) "NESTED loop: " + getInitialStates else ""
-    }
+    //private def toDotString(visited: Set[WeightedPAutomaton[N, D, W]]): String = {
+      //  if (!visited.add(this)) "NESTED loop: " + getInitialStates else ""
+    //}
 
     private def toDotString(visited: Set[WeightedPAutomaton[N, D, W]]): String = {
         if (!visited.add(this)) {
-            return "NESTED loop: " + getInitialStates
+            return "NESTED loop: " + getInitialStates()
         }
         var s = "digraph {\n"
-        val trans = mutable.TreeSet[String]()
-        val summaryIdentifier = mutable.ListBuffer[String]()
-        val removableTrans = mutable.HashSet[Transition[N, D]]()
+        val trans = new TreeSet[String]()
+        val summaryIdentifier = new ListBuffer[String]()
+        val removableTrans = Set[Transition[N, D]]()
         if (SUMMARIZE) {
-            val mergableStates = mutable.HashMap[(N, D), mutable.Set[Transition[N, D]]]()
+            val mergableStates = HashBasedTable.create[N, D, Set[Transition[N, D]]]()
             for (source <- states) {
-                if (transitionsInto.get(source).isEmpty && transitionsOutOf.get(source).size == 1) {
-                    for (t <- transitionsOutOf.get(source)) {
-                        val set = mergableStates.getOrElse((t.getLabel, t.getTarget), mutable.HashSet[Transition[N, D]]())
-                        set.add(t)
-                        removableTrans.add(t)
-                        mergableStates.put((t.getLabel, t.getTarget), set)
-                    }
+            if (transitionsInto.get(source).isEmpty && transitionsOutOf.get(source).size == 1) {
+                for (t <- transitionsOutOf.get(source)) {
+                var set = mergableStates.get(t.getLabel, t.getTarget)
+                if (set == null) {
+                    set = Set[Transition[N, D]]()
+                }
+                set.add(t)
+                removableTrans.add(t)
+                mergableStates.put(t.getLabel, t.getTarget, set)
                 }
             }
-            for ((label, target) <- mergableStates.keys) {
-                val trs = mergableStates.get((label, target))
-                if (trs.isDefined) {
-                    val labels = mutable.ListBuffer[String]()
-                    for (t <- trs.get) {
-                        labels.add(escapeQuotes(wrapIfInitialOrFinalState(t.getStart)))
-                    }
-                    if (labels.nonEmpty) {
-                        summaryIdentifier.add(Joiner.on("\\n").join(labels))
-                        var v = "\t\"" + "SUMNODE_" + summaryIdentifier.size + "\""
-                        v += " -> \"" + escapeQuotes(wrapIfInitialOrFinalState(target)) + "\""
-                        v += "[label=\"" + escapeQuotes(label.toString) + "\"];\n"
-                        trans.add(v)
-                    }
+            }
+            for (label <- mergableStates.rowKeySet()) {
+            for (target <- mergableStates.columnKeySet()) {
+                val trs = mergableStates.get(label, target)
+                if (trs != null) {
+                val labels = new ListBuffer[String]()
+                for (t <- trs) {
+                    labels.add(escapeQuotes(wrapIfInitialOrFinalState(t.getStart)))
                 }
+                if (labels.nonEmpty) {
+                    summaryIdentifier.add(labels.mkString("\\n"))
+                    var v = "\t\"" + "SUMNODE_" + summaryIdentifier.size + "\""
+                    v += " -> \"" + escapeQuotes(wrapIfInitialOrFinalState(target)) + "\""
+                    v += "[label=\"" + escapeQuotes(label.toString) + "\"];\n"
+                    trans.add(v)
+                }
+                }
+            }
             }
         }
         for (source <- states) {
             val collection = transitionsOutOf.get(source)
-
             for (target <- states) {
-                val labels = mutable.ListBuffer[String]()
-                for (t <- collection) {
-                    if (!removableTrans.contains(t) && t.getTarget.equals(target)) {
-                        labels.add(escapeQuotes(t.getLabel.toString) + " W: " + transitionToWeights.get(t))
-                    }
-                }
-                if (labels.nonEmpty) {
-                    var v = "\t\"" + escapeQuotes(wrapIfInitialOrFinalState(source)) + "\""
-                    v += " -> \"" + escapeQuotes(wrapIfInitialOrFinalState(target)) + "\""
-                    v += "[label=\"" + Joiner.on("\\n").join(labels) + "\"];\n"
-                    trans.add(v)
+            val labels = new ListBuffer[String]()
+            for (t <- collection) {
+                if (!removableTrans.contains(t) && t.getTarget.equals(target)) {
+                labels.add(escapeQuotes(t.getLabel.toString) + " W: " + transitionToWeights.get(t))
                 }
             }
+            if (labels.nonEmpty) {
+                var v = "\t\"" + escapeQuotes(wrapIfInitialOrFinalState(source)) + "\""
+                v += " -> \"" + escapeQuotes(wrapIfInitialOrFinalState(target)) + "\""
+                v += "[label=\"" + labels.mkString("\\n") + "\"];\n"
+                trans.add(v)
+            }
+            }
         }
-        s += Joiner.on("").join(trans)
+        s += trans.mkString("")
         s += "}\n"
         if (SUMMARIZE) {
             var i = 1
             for (node <- summaryIdentifier) {
-                s += "SUMNODE_" + i + ":\n"
-                s += node
-                s += "\n"
-                i += 1
+            s += "SUMNODE_" + i + ":\n"
+            s += node
+            s += "\n"
+            i += 1
             }
         }
-
         s += "Transitions: " + transitions.size + " Nested: " + nestedAutomatons.size + "\n"
         for (nested <- nestedAutomatons) {
             s += "NESTED -> \n"
