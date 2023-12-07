@@ -66,7 +66,7 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
         addWForTransition
     }
 
-    def getFinalState: HashSet[D] = finalState.toSet
+    def getFinalState: Set[D] = finalState.toSet
 
     override def toString: String = {
         var s = "PAutomaton\n"
@@ -177,7 +177,7 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
         s
     }
 
-    def getInitialStates: HashSet[D] = initialStatesToSource.keySet
+    def getInitialStates: Set[D] = initialStatesToSource.keySet
 
     private def escapeQuotes(string: String): String = string.replace("\"", "")
 
@@ -267,19 +267,19 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
                 states.add(trans.getStart)
                 var added = transitions.add(trans)
                 val oldWeight = transitionToWeights(trans)
-                val newWeight = if (oldWeight == null) weight else new W(oldWeight.combineWith(weight))
+                val newWeight = if (oldWeight == null) weight else oldWeight.combineWith(weight)
 
                 if (!newWeight.equals(oldWeight)) {
-                    transitionToWeights.put(trans, W)
+                    transitionToWeights.put(trans, newWeight)
 
                     for (l <- listeners.toList) {
-                        l.onWeightAdded(trans, W, this)
+                        l.onWeightAdded(trans, newWeight, this)
                     }
                     for (l <- stateListeners(trans.getStart).toList) {
-                        l.onOutTransitionAdded(trans, W, this)
+                        l.onOutTransitionAdded(trans, newWeight, this)
                     }
                     for (l <- stateListeners(trans.getTarget).toList) {
-                        l.onInTransitionAdded(trans, W, this)
+                        l.onInTransitionAdded(trans, newWeight, this)
                     }
                     added = true
                 }
@@ -414,11 +414,12 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
 
     def registerUnbalancedPopListener(l: UnbalancedPopListener[N, D, W]): Unit = {
         if (unbalancedPopListeners.add(l)) {
-            for ((key, value) <- unbalancedPops) {
+            val entries = unbalancedPops.entrySet().asScala.toList
+            for (e <- entries) {
                 val t = e.getKey
                 l.unbalancedPop(t.targetState, t.trans, e.getValue)
             }
-        }
+        } 
     }
 
     def unbalancedPop(targetState: D, trans: Transition[N, D], weight: W): Unit = {
@@ -461,7 +462,7 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
         def addedSummary(t: Transition[N, D]): Unit
     }
 
-    private class UnbalancedPopEntry(targetState: D, trans: Transition[N, D]) {
+    class UnbalancedPopEntry(val targetState: D, trans: Transition[N, D]) {
 
         override def hashCode(): Int = {
             val prime = 31
@@ -506,7 +507,7 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
         LOGGER.trace("Start computing final weights")
         val w = Stopwatch.createStarted()
         for (s <- initialStatesToSource.keySet) {
-            registerListener(new ValueComputationListener(s, getOne()))
+            registerListener(new ValueComputationListener(s, getOne))
         }
         LOGGER.trace("Finished computing final weights in {}", w)
         transitionsToFinalWeights
