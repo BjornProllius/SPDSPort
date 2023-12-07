@@ -66,7 +66,7 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
         addWForTransition
     }
 
-    def getFinalState: Set[D] = finalState.toSet
+    def getFinalState: HashSet[D] = finalState
 
     override def toString: String = {
         var s = "PAutomaton\n"
@@ -235,7 +235,7 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
     def getStates: HashSet[D] = states
 
     def getEdges: HashSet[Edge[D, N]] = {
-        val trans = Set[Edge[D, N]]()
+        val trans = HashSet[Edge[D, N]]()
         for (tran <- transitions) {
             if (!tran.getLabel.equals(epsilon)) {
                 trans.add(new Transition[N, D](tran.getTarget, tran.getLabel, tran.getStart))
@@ -338,7 +338,7 @@ def addWeightForTransition(trans: Transition[N, D], weight: W): Boolean = {
 
     def registerListener(l: WPAStateListener[N, D, W]): Unit = {
         if (!stateListeners.contains(l.getState)) {
-            stateListeners += (l.getState -> l)
+            stateListeners += (l.getState -> mutable.HashSet(l))
             increaseListenerCount(l)
             for (t <- transitionsOutOf.getOrElse(l.getState, List())) {
                 l.onOutTransitionAdded(t, transitionToWeights(t), this)
@@ -413,12 +413,10 @@ def addWeightForTransition(trans: Transition[N, D], weight: W): Boolean = {
 
     def registerUnbalancedPopListener(l: UnbalancedPopListener[N, D, W]): Unit = {
         if (unbalancedPopListeners.add(l)) {
-            val entries = unbalancedPops.entrySet().asScala.toList
-            for (e <- entries) {
-                val t = e.getKey
-                l.unbalancedPop(t.targetState, t.trans, e.getValue)
+            for ((t, value) <- unbalancedPops) {
+                l.unbalancedPop(t.targetState, t.trans, value)
             }
-        } 
+        }
     }
 
     def unbalancedPop(targetState: D, trans: Transition[N, D], weight: W): Unit = {
