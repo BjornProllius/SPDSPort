@@ -4,6 +4,7 @@ import com.google.common.collect.{Lists, Sets}
 import scala.collection.mutable.Queue
 import wpds.interfaces.{IPushdownSystem, Location, State}
 import wpds.wildcard.Wildcard
+import scala.jdk.CollectionConverters._
 
 class PreStar[N <: Location, D <: State, W <: Weight] {
   private var worklist: Queue[Transition[N, D]] = Queue()
@@ -12,10 +13,10 @@ class PreStar[N <: Location, D <: State, W <: Weight] {
 
   def prestar(pds: IPushdownSystem[N, D, W], initialAutomaton: WeightedPAutomaton[N, D, W]): WeightedPAutomaton[N, D, W] = {
     this.pds = pds
-    worklist = Queue(initialAutomaton.getTransitions:_*)
+    worklist = Queue(initialAutomaton.getTransitions.asScala.toSeq:_*)
     fa = initialAutomaton
 
-    for (trans <- Sets.newHashSet(fa.getTransitions)) {
+    for (trans <- Sets.newHashSet(fa.getTransitions).asScala) {
       val one = fa.getOne()
       fa.addWeightForTransition(trans, one)
     }
