@@ -6,7 +6,7 @@ import org.slf4j.{Logger, LoggerFactory}
 import pathexpression.{Edge, IRegEx, LabeledGraph, PathExpressionComputer, RegEx}
 import wpds.interfaces._
 
-import scala.collection.mutable.{Set, TreeSet, ListBuffer, HashMap}
+import scala.collection.mutable.{Set, TreeSet, ListBuffer, HashMap, HashSet}
 import com.google.common.collect.{Table, HashBasedTable}
 
 import com.google.common.collect._
@@ -66,7 +66,7 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
         addWForTransition
     }
 
-    def getFinalState: Set[D] = finalState.toSet
+    def getFinalState: HashSet[D] = finalState.toSet
 
     override def toString: String = {
         var s = "PAutomaton\n"
@@ -92,28 +92,28 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
 
     private val SUMMARIZE = false
 
-    def toDotString: String = toDotString(Set[WeightedPAutomaton[N, D, W]]())
+    def toDotString: String = toDotString(HashSet[WeightedPAutomaton[N, D, W]]())
 
     //private def toDotString(visited: Set[WeightedPAutomaton[N, D, W]]): String = {
       //  if (!visited.add(this)) "NESTED loop: " + getInitialStates else ""
     //}
 
-    private def toDotString(visited: Set[WeightedPAutomaton[N, D, W]]): String = {
+    private def toDotString(visited: HashSet[WeightedPAutomaton[N, D, W]]): String = {
         if (!visited.add(this)) {
             return "NESTED loop: " + getInitialStates
         }
         var s = "digraph {\n"
         val trans = new TreeSet[String]()
         val summaryIdentifier = new ListBuffer[String]()
-        val removableTrans = Set[Transition[N, D]]()
+        val removableTrans = HashSet[Transition[N, D]]()
         if (SUMMARIZE) {
-            val mergableStates = HashBasedTable.create[N, D, Set[Transition[N, D]]]()
-            for (source <- states.asScala) {
+            val mergableStates = HashBasedTable.create[N, D, HashSet[Transition[N, D]]]()
+            for (source <- states) {
             if (transitionsInto.get(source).isEmpty && transitionsOutOf.get(source).size == 1) {
-                for (t <- transitionsOutOf.get(source)) {
+                for (t <- transitionsOutOf.get(source).flatten) {
                     var set = mergableStates.get(t.getLabel, t.getTarget)
                     if (set == null) {
-                        set = Set[Transition[N, D]]()
+                        set = HashSet[Transition[N, D]]()
                 }
                 set.add(t)
                 removableTrans.add(t)
@@ -121,7 +121,7 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
                 }
             }
             }
-            for (label <- mergableStates.keys()) {
+            for (label <- mergableStates.rowKeySet()) {
             for (target <- mergableStates.columnKeySet()) {
                 val trs = mergableStates.get(label, target)
                 if (trs != null) {
@@ -144,7 +144,7 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
             val collection = transitionsOutOf.get(source)
             for (target <- states) {
             val labels = new ListBuffer[String]()
-            for (t <- collection) {
+            for (t <- collection.flatten) {
                 if (!removableTrans.contains(t) && t.getTarget.equals(target)) {
                 labels += escapeQuotes(t.getLabel.toString) + " W: " + transitionToWeights.get(t)
                 }
@@ -177,7 +177,7 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
         s
     }
 
-    def getInitialStates: Set[D] = initialStatesToSource.keySet
+    def getInitialStates: HashSet[D] = initialStatesToSource.keySet
 
     private def escapeQuotes(string: String): String = string.replace("\"", "")
 
@@ -231,10 +231,11 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
         if (res == null) new RegEx.EmptySet[N]() else res
     }
 
-    def getStates: Set[D] = states
 
-    def getEdges: Set[Edge[D, N]] = {
-        val trans = Sets.newHashSet[Edge[D, N]]()
+    def getStates: HashSet[D] = states
+
+    def getEdges: HashSet[Edge[D, N]] = {
+        val trans = Set[Edge[D, N]]()
         for (tran <- transitions) {
             if (!tran.getLabel.equals(epsilon)) {
                 trans.add(new Transition[N, D](tran.getTarget, tran.getLabel, tran.getStart))
@@ -243,7 +244,7 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
         trans
     }
 
-    def getNodes: Set[D] = getStates
+    def getNodes: HashSet[D] = getStates
 
     def addWeightForTransition(trans: Transition[N, D], weight: W): Boolean = {
         if (weight == null) throw new IllegalArgumentException("Weight must not be null!")
@@ -365,7 +366,7 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
         dfsVisitor.registerListener(state, l)
     }
 
-    protected def getStateToDFS: Map[D, ForwardDFSVisitor[N, D, W]] = {
+    protected def getStateToDFS: HashMap[D, ForwardDFSVisitor[N, D, W]] = {
         stateToDFS
     }
 
@@ -381,7 +382,7 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
         dfsEpsVisitor.registerListener(state, l)
     }
 
-    protected def getStateToEpsilonDFS: Map[D, ForwardDFSVisitor[N, D, W]] = {
+    protected def getStateToEpsilonDFS: HashMap[D, ForwardDFSVisitor[N, D, W]] = {
         stateToEpsilonDFS
     }
 
@@ -399,9 +400,9 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
 
             override def isGeneratedState(d: D): Boolean = isGeneratedState(d)
 
-            override protected def getStateToDFS(): Map[D, ForwardDFSVisitor[N, D, W]] = stateToDFS
+            override protected def getStateToDFS(): HashMap[D, ForwardDFSVisitor[N, D, W]] = stateToDFS
 
-            override protected def getStateToEpsilonDFS(): Map[D, ForwardDFSVisitor[N, D, W]] = stateToEpsilonDFS
+            override protected def getStateToEpsilonDFS(): HashMap[D, ForwardDFSVisitor[N, D, W]] = stateToEpsilonDFS
 
             override def nested(): Boolean = true
 
@@ -432,8 +433,10 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
         }
     }
 
-    private var summaryEdges: Set[Transition[N, D]] = Set()
-    private var summaryEdgeListener: Set[SummaryListener[N, D]] = Set()
+    
+
+    private var summaryEdges: HashSet[Transition[N, D]] = HashSet()
+    private var summaryEdgeListener: HashSet[SummaryListener[N, D]] = HashSet()
 
     def registerSummaryEdge(t: Transition[N, D]): Unit = {
         if (summaryEdges.add(t)) {
@@ -499,7 +502,7 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
         private def getOuterType(): WeightedPAutomaton[N, D, W] = WeightedPAutomaton.this
     }
 
-    def getTransitionsToFinalWeights: Map[Transition[N, D], W] = {
+    def getTransitionsToFinalWeights: HashMap[Transition[N, D], W] = {
         LOGGER.trace("Start computing final weights")
         val w = Stopwatch.createStarted()
         for (s <- initialStatesToSource.keySet) {
@@ -594,7 +597,7 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
     }
 
     def containsLoop(): Boolean = {
-        var visited = Set[D]()
+        var visited = HashSet[D]()
         var worklist = initialStatesToSource.keySet.toList
         while (worklist.nonEmpty) {
             val pop = worklist.head
@@ -602,7 +605,7 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
             visited += pop
             val inTrans = transitionsInto.getOrElse(pop, Set())
             for (t <- inTrans) {
-                if (t.getLabel == this.epsilon()) {}
+                if (t.getLabel == this.epsilon) {}
                 else if (!isGeneratedState(t.getStart)) {}
                 else if (visited.contains(t.getStart)) {
                     return true
@@ -615,16 +618,16 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
         false
     }
 
-    def getLongestPath(): Set[N] = {
+    def getLongestPath(): HashSet[N] = {
         var worklist = initialStatesToSource.keySet.toList
-        var pathReachingD = Map[D, Set[N]]()
+        var pathReachingD = HashMap[D, HashSet[N]]()
         while (worklist.nonEmpty) {
             val pop = worklist.head
             worklist = worklist.tail
             val atCurr = pathReachingD.getOrElse(pop, Set())
             val inTrans = transitionsInto.getOrElse(pop, Set())
             for (t <- inTrans) {
-                if (t.getLabel == this.epsilon()) {}
+                if (t.getLabel == this.epsilon) {}
                 else if (!isGeneratedState(t.getStart)) {}
                 else if (t.getStart == pop) {}
                 else {
@@ -637,7 +640,7 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
                 }
             }
         }
-        var longest = Set[N]()
+        var longest = HashSet[N]()
         for (l <- pathReachingD.values) {
             if (longest.size < l.size) {
                 longest = l
@@ -646,7 +649,7 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
         longest
     }
 
-    private def getOrCreate(pathReachingD: mutable.Map[D, mutable.Set[N]], pop: D): mutable.Set[N] = {
+    private def getOrCreate(pathReachingD: mutable.HashMap[D, mutable.Set[N]], pop: D): mutable.Set[N] = {
         pathReachingD.getOrElseUpdate(pop, mutable.Set[N]())
     }
 
@@ -654,9 +657,10 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
         initialStatesToSource.contains(target)
     }
 
+    
     def addUnbalancedState(state: D, parent: D): Boolean = {
         var distance = 0
-        val parents = mutable.Set[D]()
+        val parents = HashSet[D]()
         if (!initialStatesToSource.contains(parent)) {
             distance = stateToUnbalancedDistance(parent)
             parents += parent
@@ -664,21 +668,23 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
             parents ++= initialStatesToSource(parent)
         }
         val newDistance = distance + 1
-        stateToUnbalancedDistance += (state -> newDistance)
+        stateToUnbalancedDistance.put(state, newDistance)
         if (getMaxUnbalancedDepth > 0 && newDistance > getMaxUnbalancedDepth) {
             return false
         }
-        initialStatesToSource += (state -> parents.toSet)
+        initialStatesToSource.put(state, parents)
         true
     }
 
-    def addInitialState(state: D): Boolean = {
-        initialStatesToSource += (state -> state)
-        true
+    
+
+
+    def addInitialState(state: D): Option[HashSet[D]] = {
+        initialStatesToSource.put(state, HashSet(state))
     }
 
     def unregisterAllListeners(): Unit = {
-        conntectedPushListeners.clear()
+        connectedPushListeners.clear()
         nestedAutomataListeners.clear()
         stateListeners.clear()
         listeners.clear()
@@ -696,6 +702,6 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
 
     def getMaxUnbalancedDepth: Int = -1
 
-    def getUnbalancedStartOf(target: D): Set[D] = initialStatesToSource(target)
+    def getUnbalancedStartOf(target: D): HashSet[D] = initialStatesToSource(target)
 
 }
