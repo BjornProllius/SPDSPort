@@ -55,11 +55,11 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
     }
 
     def addTransition(trans: Transition[N, D]): Boolean = {
-        val addWeightForTransition = addWeightForTransition(trans, getOne())
-        if (!addWeightForTransition) {
+        val addWForTransition: Boolean = addWeightForTransition(trans, getOne())
+        if (!addWForTransition) {
             failedDirectAdditions += 1
         }
-        addWeightForTransition
+        addWForTransition
     }
 
     def getFinalState: Set[D] = finalState.toSet
