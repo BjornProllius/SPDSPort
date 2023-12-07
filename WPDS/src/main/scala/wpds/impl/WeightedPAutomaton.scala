@@ -13,19 +13,21 @@ import com.google.common.collect._
 import org.slf4j.{Logger, LoggerFactory}
 import pathexpression.LabeledGraph
 import scala.collection.mutable
-import java.util.Collection
+import scala.jdk.CollectionConverters._
 
 abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extends LabeledGraph[D, N] {
+    
+
     private val LOGGER = LoggerFactory.getLogger(classOf[WeightedPAutomaton[N, D, W]])
     private val transitionToWeights = mutable.HashMap[Transition[N, D], W]()
     protected val transitions = mutable.HashSet[Transition[N, D]]()
     protected val finalState = mutable.HashSet[D]()
-    protected val initialStatesToSource = HashMultimap.create[D, D]()
+    protected val initialStatesToSource = mutable.HashMap[D, mutable.HashSet[D]]()
     protected val states = mutable.HashSet[D]()
-    private val transitionsOutOf = HashMultimap.create[D, Transition[N, D]]()
-    private val transitionsInto = HashMultimap.create[D, Transition[N, D]]()
+    private val transitionsOutOf = mutable.HashMap[D, mutable.HashSet[Transition[N, D]]]()
+    private val transitionsInto = mutable.HashMap[D, mutable.HashSet[Transition[N, D]]]()
     private val listeners = mutable.HashSet[WPAUpdateListener[N, D, W]]()
-    private val stateListeners = HashMultimap.create[D, WPAStateListener[N, D, W]]()
+    private val stateListeners = mutable.HashMap[D, mutable.HashSet[WPAStateListener[N, D, W]]]()
     private val stateToDFS = mutable.HashMap[D, ForwardDFSVisitor[N, D, W]]()
     private val stateToEpsilonDFS = mutable.HashMap[D, ForwardDFSVisitor[N, D, W]]()
     private val nestedAutomatons = mutable.HashSet[WeightedPAutomaton[N, D, W]]()
@@ -33,7 +35,7 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
     private val stateToEpsilonReachabilityListener = mutable.HashMap[D, ReachabilityListener[N, D]]()
     private val stateToReachabilityListener = mutable.HashMap[D, ReachabilityListener[N, D]]()
     private val connectedPushes = mutable.HashSet[ReturnSiteWithWeights]()
-    private val conntectedPushListeners = mutable.HashSet[ConnectPushListener[N, D, W]]()
+    private val connectedPushListeners = mutable.HashSet[ConnectPushListener[N, D, W]]()
     private val unbalancedPopListeners = mutable.HashSet[UnbalancedPopListener[N, D, W]]()
     private val unbalancedPops = mutable.HashMap[UnbalancedPopEntry, W]()
     private val transitionsToFinalWeights = mutable.HashMap[Transition[N, D], W]()
@@ -48,7 +50,6 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
     private val stateToDistanceToInitial = mutable.HashMap[D, Integer]()
     private val stateToUnbalancedDistance = mutable.HashMap[D, Integer]()
     private val stateCreatingTransition = mutable.HashMap[D, Transition[N, D]]()
-
     def createState(d: D, loc: N): D
 
     def isGeneratedState(d: D): Boolean
@@ -82,7 +83,7 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
     }
 
     private def wrapIfInitialOrFinalState(s: D): String = {
-        if (initialStatesToSource.containsKey(s)) "ENTRY: " + wrapFinalState(s) else wrapFinalState(s)
+        if (initialStatesToSource.contains(s)) "ENTRY: " + wrapFinalState(s) else wrapFinalState(s)
     }
 
     private def wrapFinalState(s: D): String = {
@@ -99,7 +100,7 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
 
     private def toDotString(visited: Set[WeightedPAutomaton[N, D, W]]): String = {
         if (!visited.add(this)) {
-            return "NESTED loop: " + getInitialStates()
+            return "NESTED loop: " + getInitialStates
         }
         var s = "digraph {\n"
         val trans = new TreeSet[String]()
@@ -107,12 +108,12 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
         val removableTrans = Set[Transition[N, D]]()
         if (SUMMARIZE) {
             val mergableStates = HashBasedTable.create[N, D, Set[Transition[N, D]]]()
-            for (source <- states) {
+            for (source <- states.asScala) {
             if (transitionsInto.get(source).isEmpty && transitionsOutOf.get(source).size == 1) {
                 for (t <- transitionsOutOf.get(source)) {
-                var set = mergableStates.get(t.getLabel, t.getTarget)
-                if (set == null) {
-                    set = Set[Transition[N, D]]()
+                    var set = mergableStates.get(t.getLabel, t.getTarget)
+                    if (set == null) {
+                        set = Set[Transition[N, D]]()
                 }
                 set.add(t)
                 removableTrans.add(t)
@@ -120,7 +121,7 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
                 }
             }
             }
-            for (label <- mergableStates.rowKeySet()) {
+            for (label <- mergableStates.keys()) {
             for (target <- mergableStates.columnKeySet()) {
                 val trs = mergableStates.get(label, target)
                 if (trs != null) {
@@ -145,7 +146,7 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
             val labels = new ListBuffer[String]()
             for (t <- collection) {
                 if (!removableTrans.contains(t) && t.getTarget.equals(target)) {
-                labels.add(escapeQuotes(t.getLabel.toString) + " W: " + transitionToWeights.get(t))
+                labels += escapeQuotes(t.getLabel.toString) + " W: " + transitionToWeights.get(t)
                 }
             }
             if (labels.nonEmpty) {
@@ -189,7 +190,7 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
             groupedByTargetAndLabel.put(t.getTarget, t.getLabel, collection)
         }
         var s = "digraph {\n"
-        for (target <- groupedByTargetAndLabel.rowKeySet) {
+        for (target <- groupedByTargetAndLabel.keys) {
             for (label <- groupedByTargetAndLabel.columnKeySet) {
                 val source = groupedByTargetAndLabel.get(target, label)
                 if (source != null) {
@@ -265,19 +266,19 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
                 states.add(trans.getStart)
                 var added = transitions.add(trans)
                 val oldWeight = transitionToWeights(trans)
-                val newWeight = if (oldWeight == null) weight else oldWeight.combineWith(weight)
+                val newWeight = if (oldWeight == null) weight else new W(oldWeight.combineWith(weight))
 
                 if (!newWeight.equals(oldWeight)) {
-                    transitionToWeights.put(trans, newWeight)
+                    transitionToWeights.put(trans, W)
 
                     for (l <- listeners.toList) {
-                        l.onWeightAdded(trans, newWeight, this)
+                        l.onWeightAdded(trans, W, this)
                     }
                     for (l <- stateListeners(trans.getStart).toList) {
-                        l.onOutTransitionAdded(trans, newWeight, this)
+                        l.onOutTransitionAdded(trans, W, this)
                     }
                     for (l <- stateListeners(trans.getTarget).toList) {
-                        l.onInTransitionAdded(trans, newWeight, this)
+                        l.onInTransitionAdded(trans, W, this)
                     }
                     added = true
                 }
@@ -313,12 +314,14 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
 
 
     def registerListener(listener: WPAUpdateListener[N, D, W]): Unit = {
-        if (!listeners.add(listener)) return
-        for (transAndWeight <- transitionToWeights.entrySet().toList) {
-            listener.onWeightAdded(transAndWeight.getKey, transAndWeight.getValue, this)
-        }
-        for (nested <- nestedAutomatons.toList) {
-            nested.registerListener(listener)
+        if (!listeners.contains(listener)) {
+            listeners += listener
+            for ((trans, weight) <- transitionToWeights) {
+                listener.onWeightAdded(trans, weight, this)
+            }
+            for (nested <- nestedAutomatons) {
+                nested.registerListener(listener)
+            }
         }
     }
 
@@ -334,28 +337,27 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
     def onManyStateListenerRegister(): Unit = {}
 
     def registerListener(l: WPAStateListener[N, D, W]): Unit = {
-        if (!stateListeners.put(l.getState, l)) {
-            return
-        }
-        increaseListenerCount(l)
-        for (t <- transitionsOutOf.get(l.getState).toList) {
-            l.onOutTransitionAdded(t, transitionToWeights.get(t), this)
-        }
-        for (t <- transitionsInto.get(l.getState).toList) {
-            l.onInTransitionAdded(t, transitionToWeights.get(t), this)
-        }
-
-        for (nested <- nestedAutomatons.toList) {
-            nested.registerListener(l)
+        if (!stateListeners.contains(l.getState)) {
+            stateListeners += (l.getState -> l)
+            increaseListenerCount(l)
+            for (t <- transitionsOutOf.getOrElse(l.getState, List())) {
+                l.onOutTransitionAdded(t, transitionToWeights(t), this)
+            }
+            for (t <- transitionsInto.getOrElse(l.getState, List())) {
+                l.onInTransitionAdded(t, transitionToWeights(t), this)
+            }
+            for (nested <- nestedAutomatons) {
+                nested.registerListener(l)
+            }
         }
     }
 
     def addFinalState(state: D): Unit = {
-        this.finalState.add(state)
+        this.finalState += state
     }
 
     def registerDFSListener(state: D, l: ReachabilityListener[N, D]): Unit = {
-        stateToReachabilityListener.put(state, l)
+        stateToReachabilityListener += (state -> l)
         if (dfsVisitor == null) {
             dfsVisitor = new ForwardDFSVisitor[N, D, W](this)
             this.registerListener(dfsVisitor)
@@ -368,12 +370,12 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
     }
 
     def registerDFSEpsilonListener(state: D, l: ReachabilityListener[N, D]): Unit = {
-        stateToEpsilonReachabilityListener.put(state, l)
+        stateToEpsilonReachabilityListener += (state -> l)
         if (dfsEpsVisitor == null) {
             dfsEpsVisitor = new ForwardDFSEpsilonVisitor[N, D, W](this)
             this.registerListener(dfsEpsVisitor)
         }
-        for (nested <- nestedAutomatons.toList) {
+        for (nested <- nestedAutomatons) {
             nested.registerDFSEpsilonListener(state, l)
         }
         dfsEpsVisitor.registerListener(state, l)
@@ -411,7 +413,7 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
 
     def registerUnbalancedPopListener(l: UnbalancedPopListener[N, D, W]): Unit = {
         if (unbalancedPopListeners.add(l)) {
-            for (e <- unbalancedPops.entrySet().toList) {
+            for ((key, value) <- unbalancedPops) {
                 val t = e.getKey
                 l.unbalancedPop(t.targetState, t.trans, e.getValue)
             }
@@ -556,11 +558,11 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
         for (e <- unbalancedPopListeners.toList) {
             nested.registerUnbalancedPopListener(e)
         }
-        for (e <- stateToEpsilonReachabilityListener.entrySet.toList) {
-            nested.registerDFSEpsilonListener(e.getKey, e.getValue)
+        for ((key, value) <- stateToEpsilonReachabilityListener) {
+            nested.registerDFSEpsilonListener(key, value)
         }
-        for (e <- stateToReachabilityListener.entrySet.toList) {
-            nested.registerDFSListener(e.getKey, e.getValue)
+        for ((key, value) <- stateToReachabilityListener) {
+            nested.registerDFSListener(key, value)
         }
         for (e <- nestedAutomataListeners.toList) {
             e.nestedAutomaton(this, nested)
@@ -569,7 +571,7 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
     }
 
     def registerNestedAutomatonListener(l: NestedAutomatonListener[N, D, W]): Unit = {
-        if (!nestedAutomataListeners.add(l)) return
+        nestedAutomataListeners += l
         for (nested <- nestedAutomatons.toList) {
             l.nestedAutomaton(this, nested)
         }
@@ -598,7 +600,7 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
             val pop = worklist.head
             worklist = worklist.tail
             visited += pop
-            val inTrans = transitionsInto.get(pop)
+            val inTrans = transitionsInto.getOrElse(pop, Set())
             for (t <- inTrans) {
                 if (t.getLabel == this.epsilon()) {}
                 else if (!isGeneratedState(t.getStart)) {}
@@ -619,17 +621,17 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
         while (worklist.nonEmpty) {
             val pop = worklist.head
             worklist = worklist.tail
-            val atCurr = getOrCreate(pathReachingD, pop)
-            val inTrans = transitionsInto.get(pop)
+            val atCurr = pathReachingD.getOrElse(pop, Set())
+            val inTrans = transitionsInto.getOrElse(pop, Set())
             for (t <- inTrans) {
                 if (t.getLabel == this.epsilon()) {}
                 else if (!isGeneratedState(t.getStart)) {}
                 else if (t.getStart == pop) {}
                 else {
                     val next = t.getStart
-                    val atNext = getOrCreate(pathReachingD, next)
+                    val atNext = pathReachingD.getOrElse(next, Set())
                     val newAtCurr = atCurr + t.getLabel
-                    if (atNext ++ newAtCurr != atNext) {
+                    if ((atNext ++ newAtCurr) != atNext) {
                         worklist = next :: worklist
                     }
                 }
@@ -644,12 +646,8 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
         longest
     }
 
-    private def getOrCreate(pathReachingD: Map[D, Set[N]], pop: D): Set[N] = {
-        pathReachingD.getOrElse(pop, {
-            val collection = Set[N]()
-            pathReachingD += (pop -> collection)
-            collection
-        })
+    private def getOrCreate(pathReachingD: mutable.Map[D, mutable.Set[N]], pop: D): mutable.Set[N] = {
+        pathReachingD.getOrElseUpdate(pop, mutable.Set[N]())
     }
 
     def isUnbalancedState(target: D): Boolean = {
@@ -661,21 +659,21 @@ abstract class WeightedPAutomaton[N <: Location, D <: State, W <: Weight] extend
         val parents = mutable.Set[D]()
         if (!initialStatesToSource.contains(parent)) {
             distance = stateToUnbalancedDistance(parent)
-            parents.add(parent)
+            parents += parent
         } else {
             parents ++= initialStatesToSource(parent)
         }
         val newDistance = distance + 1
-        stateToUnbalancedDistance.put(state, newDistance)
+        stateToUnbalancedDistance += (state -> newDistance)
         if (getMaxUnbalancedDepth > 0 && newDistance > getMaxUnbalancedDepth) {
             return false
         }
-        initialStatesToSource.put(state, parents.toSet)
+        initialStatesToSource += (state -> parents.toSet)
         true
     }
 
     def addInitialState(state: D): Boolean = {
-        initialStatesToSource.put(state, state)
+        initialStatesToSource += (state -> state)
         true
     }
 
