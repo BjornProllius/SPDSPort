@@ -450,7 +450,11 @@ def addWeightForTransition(trans: Transition[N, D], weight: W): Boolean = {
                 l.addedSummary(edge)
             }
             for (nested <- nestedAutomatons.toList) {
-                nested.addSummaryListener(l)
+                // Create a new SummaryListener of the correct type
+                val correctTypeListener = new nested.SummaryListener[N, D] {
+                    // Implement the methods of SummaryListener here, using l as needed
+                }
+                nested.addSummaryListener(correctTypeListener)
             }
         }
     }
@@ -557,7 +561,11 @@ def addWeightForTransition(trans: Transition[N, D], weight: W): Boolean = {
             nested.registerListener(e)
         }
         for (e <- summaryEdgeListener.toList) {
-            nested.addSummaryListener(e)
+            // Create a new SummaryListener of the correct type
+            val correctTypeListener = new nested.SummaryListener[N, D] {
+                // Implement the methods of SummaryListener here, using e as needed
+            }
+            nested.addSummaryListener(correctTypeListener)
         }
         for (e <- unbalancedPopListeners.toList) {
             nested.registerUnbalancedPopListener(e)
