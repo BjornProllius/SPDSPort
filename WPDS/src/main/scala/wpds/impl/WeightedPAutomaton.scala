@@ -422,7 +422,7 @@ def addWeightForTransition(trans: Transition[N, D], weight: W): Boolean = {
     def unbalancedPop(targetState: D, trans: Transition[N, D], weight: W): Unit = {
         val t = new UnbalancedPopEntry(targetState, trans)
         val oldVal = unbalancedPops.get(t)
-        val newVal = if (oldVal == null) weight else oldVal.combineWith(weight)
+        val newVal = oldVal.getOrElse(weight)
         if (!newVal.equals(oldVal)) {
             unbalancedPops.put(t, newVal)
             for (l <- unbalancedPopListeners.toList) {
