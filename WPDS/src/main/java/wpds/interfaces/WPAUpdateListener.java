@@ -9,12 +9,8 @@
  * <p>Contributors: Johannes Spaeth - initial API and implementation
  * *****************************************************************************
  */
-package wpds.interfaces;
+package wpds.interfaces
 
-import wpds.impl.Transition;
-import wpds.impl.Weight;
-import wpds.impl.WeightedPAutomaton;
+import wpds.impl.{Transition,Weight,WeightedPAutomaton}
 
-public interface WPAUpdateListener<N extends Location, D extends State, W extends Weight> {
-  void onWeightAdded(Transition<N, D> t, W w, WeightedPAutomaton<N, D, W> aut);
-}
+trait WPAUpdateListener[N<:Location,D<:State,W<:Weight]{def onWeightAdded(t:Transition[N,D],w:W,aut:WeightedPAutomaton[N,D,W]):Unit}
