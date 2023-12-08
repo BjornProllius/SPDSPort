@@ -1,7 +1,8 @@
 package wpds.impl
 
 import wpds.interfaces.{Location, State, WPAStateListener}
-import wpds.impl.Weight
+
+import wpds.interfaces.{Location, State, Weight}
 
 class PrefixImport[N <: Location, D <: State, W <: Weight](autA: WeightedPAutomaton[N, D, W], autB: WeightedPAutomaton[N, D, W], t: Transition[N, D]) {
 
@@ -84,7 +85,7 @@ class PrefixImport[N <: Location, D <: State, W <: Weight](autA: WeightedPAutoma
       case _ => false
     }
   }
-  protected class HasOutTransWithSameLabel(state: D, val baseT: Transition[N, D], callback: IntersectionCallback) 
+  protected class HasOutTransWithSameLabel(state: D, baseT: Transition[N, D], callback: IntersectionCallback) 
     extends WPAStateListener[N, D, W](state) {
 
     override def onOutTransitionAdded(flowT: Transition[N, D], w: W, weightedPAutomaton: WeightedPAutomaton[N, D, W]): Unit = {
@@ -133,4 +134,7 @@ class PrefixImport[N <: Location, D <: State, W <: Weight](autA: WeightedPAutoma
       case _ => false
     }
   }
+
+
+
 }

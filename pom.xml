@@ -40,6 +40,10 @@
         <module>WPDS</module>
         <module>SynchronizedPDS</module>
         <module>testCore</module>
+        <module>boomerangPDS</module>
+        <module>idealPDS</module>
+        <module>boomerangScope</module>
+        <module>boomerangScope-WALA</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -51,23 +55,14 @@
         <skipFormatPlugin>true</skipFormatPlugin>
     </properties>
     <build>
+        <sourceDirectory>src/main/scala</sourceDirectory>
+        <testSourceDirectory>src/test/scala</testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
-                <version>4.8.1</version> <!-- specify the version you want -->
-                <configuration>
-                    <scalaVersion>3.3.1</scalaVersion> <!-- specify the Scala version you want -->
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+                <version>4.8.1</version>
+      </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -203,6 +198,16 @@
             <dependency>
                 <groupId>de.fraunhofer.iem</groupId>
                 <artifactId>testCore</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.fraunhofer.iem</groupId>
+                <artifactId>boomerangPDS</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.fraunhofer.iem</groupId>
+                <artifactId>boomerangScope</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

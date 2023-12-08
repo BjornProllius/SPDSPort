@@ -1,21 +1,7 @@
-/**
- * ***************************************************************************** Copyright (c) 2018
- * Fraunhofer IEM, Paderborn, Germany. This program and the accompanying materials are made
- * available under the terms of the Eclipse Public License 2.0 which is available at
- * http://www.eclipse.org/legal/epl-2.0.
- *
- * <p>SPDX-License-Identifier: EPL-2.0
- *
- * <p>Contributors: Johannes Spaeth - initial API and implementation
- * *****************************************************************************
- */
-
 package wpds.impl
 
-import wpds.impl.Weight
-import wpds.impl.NormalRule
-import wpds.interfaces._
-import wpds.wildcard._
+import wpds.interfaces.{Empty, IPushdownSystem, Location, State, WPAStateListener, WPAUpdateListener, WPDSUpdateListener}
+import wpds.wildcard.{ExclusionWildcard, Wildcard}
 
 abstract class PostStar[N <: Location, D <: State, W <: Weight] {
   private var pds: IPushdownSystem[N, D, W] = _
@@ -29,13 +15,13 @@ abstract class PostStar[N <: Location, D <: State, W <: Weight] {
   }
 
   private class PostStarUpdateListener(fa: WeightedPAutomaton[N, D, W]) extends WPDSUpdateListener[N, D, W] {
-    private var aut: WeightedPAutomaton[N, D, W] = fa
+    private val aut: WeightedPAutomaton[N, D, W] = fa
 
     override def onRuleAdded(rule: Rule[N, D, W]): Unit = {
       rule match {
-        case _: NormalRule[N, D, W] => fa.registerListener(new HandleNormalListener(rule.asInstanceOf[NormalRule[N, D, W]]))
-        case _: PushRule[N, D, W] => fa.registerListener(new HandlePushListener(rule.asInstanceOf[PushRule[N, D, W]]))
-        case _: PopRule[N, D, W] => fa.registerListener(new HandlePopListener(rule.getS1, rule.getL1, rule.getS2, rule.getWeight))
+        case r: NormalRule[N, D, W] => fa.registerListener(new HandleNormalListener(r))
+        case r: PushRule[N, D, W] => fa.registerListener(new HandlePushListener(r))
+        case r: PopRule[N, D, W] => fa.registerListener(new HandlePopListener(r.getS1, r.getL1, r.getS2, r.getWeight))
         case _ =>
       }
     }
@@ -43,29 +29,20 @@ abstract class PostStar[N <: Location, D <: State, W <: Weight] {
     override def hashCode(): Int = {
       val prime = 31
       var result = 1
-      result = prime * result + (if (aut == null) 0 else aut.hashCode())
+      result = prime * result + (if (aut == null) 0 else aut.hashCode)
       result
     }
 
-    override def equals(obj: Any): Boolean = {
-      obj match {
-        case other: PostStarUpdateListener =>
-          if (this == other) return true
-          if (other == null) return false
-          if (getClass != other.getClass) return false
-          if (aut == null) {
-            if (other.aut != null) return false
-          } else if (!aut.equals(other.aut)) return false
-          true
-        case _ => false
-      }
+    override def equals(obj: Any): Boolean = obj match {
+      case other: PostStarUpdateListener =>
+        (this eq other) || (other != null && getClass == other.getClass &&
+          aut == other.aut)
+      case _ => false
     }
   }
 
-  private class UpdateTransitivePopListener(var start: D, protected var label: N, target: D, protected var newWeight: W)
+  private class UpdateTransitivePopListener(start: D, label: N, target: D, newWeight: W) 
     extends WPAStateListener[N, D, W](target) {
-
-    
 
     override def onOutTransitionAdded(t: Transition[N, D], w: W, aut: WeightedPAutomaton[N, D, W]): Unit = {
       val extendWith = w.extendWith(newWeight).asInstanceOf[W]
@@ -83,28 +60,16 @@ abstract class PostStar[N <: Location, D <: State, W <: Weight] {
       result
     }
 
-    override def equals(obj: Any): Boolean = {
-      obj match {
-        case other: UpdateTransitivePopListener =>
-          if (this == other) return true
-          if (!super.equals(other)) return false
-          if (getClass != other.getClass) return false
-          if (start == null) {
-            if (other.start != null) return false
-          } else if (!start.equals(other.start)) return false
-          if (newWeight == null) {
-            if (other.newWeight != null) return false
-          } else if (!newWeight.equals(other.newWeight)) return false
-          if (label == null) {
-            if (other.label != null) return false
-          } else if (!label.equals(other.label)) return false
-          true
-        case _ => false
-      }
+    override def equals(obj: Any): Boolean = obj match {
+      case other: UpdateTransitivePopListener =>
+        (this eq other) || (other != null && getClass == other.getClass &&
+          start == other.start && newWeight == other.newWeight && label == other.label)
+      case _ => false
     }
   }
 
-  private class HandlePopListener(state: D, val popLabel: N, val targetState: D, val ruleWeight: W) extends WPAStateListener[N, D, W](state) {
+  private class HandlePopListener(state: D, var popLabel: N, var targetState: D, var ruleWeight: W) 
+    extends WPAStateListener[N, D, W](state) {
 
     override def onOutTransitionAdded(t: Transition[N, D], weight: W, aut: WeightedPAutomaton[N, D, W]): Unit = {
       if (t.getLabel.accepts(popLabel) || popLabel.accepts(t.getLabel)) {
@@ -113,9 +78,8 @@ abstract class PostStar[N <: Location, D <: State, W <: Weight] {
             throw new RuntimeException("IllegalState")
           }
           val newWeight = weight.extendWith(ruleWeight).asInstanceOf[W]
-          update(new Transition(targetState, fa.epsilon, t.getTarget), newWeight)
-          fa.registerListener(
-            new UpdateTransitivePopListener(targetState, t.getLabel, t.getTarget, newWeight))
+          update(new Transition(targetState, fa.epsilon(), t.getTarget), newWeight)
+          fa.registerListener(new UpdateTransitivePopListener(targetState, t.getLabel, t.getTarget, newWeight))
           aut.registerSummaryEdge(t)
         } else if (fa.isUnbalancedState(t.getTarget)) {
           if (popLabel.isInstanceOf[Empty]) {
@@ -126,8 +90,7 @@ abstract class PostStar[N <: Location, D <: State, W <: Weight] {
         }
       }
       if (t.getLabel.isInstanceOf[Empty]) {
-        fa.registerListener(
-          new HandlePopListener(t.getTarget, popLabel, targetState, ruleWeight))
+        fa.registerListener(new HandlePopListener(t.getTarget, popLabel, targetState, ruleWeight))
       }
     }
 
@@ -142,28 +105,18 @@ abstract class PostStar[N <: Location, D <: State, W <: Weight] {
       result
     }
 
-    override def equals(obj: Any): Boolean = {
-      obj match {
-        case other: HandlePopListener =>
-          if (this == other) return true
-          if (!super.equals(other)) return false
-          if (getClass != other.getClass) return false
-          if (popLabel == null) {
-            if (other.popLabel != null) return false
-          } else if (!popLabel.equals(other.popLabel)) return false
-          if (ruleWeight == null) {
-            if (other.ruleWeight != null) return false
-          } else if (!ruleWeight.equals(other.ruleWeight)) return false
-          if (targetState == null) {
-            if (other.targetState != null) return false
-          } else if (!targetState.equals(other.targetState)) return false
-          true
-        case _ => false
-      }
+    override def equals(obj: Any): Boolean = obj match {
+      case other: HandlePopListener =>
+        (this eq other) || (other != null && getClass == other.getClass &&
+          popLabel == other.popLabel && ruleWeight == other.ruleWeight && targetState == other.targetState)
+      case _ => false
     }
   }
 
-  private class HandleNormalListener(val rule: NormalRule[N, D, W]) extends WPAStateListener[N, D, W](rule.getS1) {
+
+
+  private class HandleNormalListener(rule: NormalRule[N, D, W]) 
+    extends WPAStateListener[N, D, W](rule.getS1) {
 
     override def onOutTransitionAdded(t: Transition[N, D], weight: W, aut: WeightedPAutomaton[N, D, W]): Unit = {
       if (t.getLabel == rule.getL1 || rule.getL1.isInstanceOf[Wildcard]) {
@@ -173,10 +126,11 @@ abstract class PostStar[N <: Location, D <: State, W <: Weight] {
         l2 match {
           case ex: ExclusionWildcard[N] =>
             if (t.getLabel == ex.excludes()) return
-          case _: Wildcard =>
-            l2 = t.getLabel
-            if (l2 == fa.epsilon) return
           case _ =>
+        }
+        if (l2.isInstanceOf[Wildcard]) {
+          l2 = t.getLabel
+          if (l2 == fa.epsilon()) return
         }
         if (!rule.canBeApplied(t, weight)) {
           return
@@ -194,27 +148,21 @@ abstract class PostStar[N <: Location, D <: State, W <: Weight] {
       result
     }
 
-    override def equals(obj: Any): Boolean = {
-      obj match {
-        case other: HandleNormalListener =>
-          if (this == other) return true
-          if (!super.equals(other)) return false
-          if (getClass != other.getClass) return false
-          if (rule == null) {
-            if (other.rule != null) return false
-          } else if (!rule.equals(other.rule)) return false
-          true
-        case _ => false
-      }
+    override def equals(obj: Any): Boolean = obj match {
+      case other: HandleNormalListener =>
+        (this eq other) || (other != null && getClass == other.getClass &&
+          rule == other.rule)
+      case _ => false
     }
   }
 
-  private class HandlePushListener(_rule: PushRule[N, D, W]) extends WPAStateListener[N, D, W](_rule.getS1) {
-    def rule = _rule
+  private class HandlePushListener(rule: PushRule[N, D, W]) 
+    extends WPAStateListener[N, D, W](rule.getS1) {
+
     override def onOutTransitionAdded(t: Transition[N, D], weight: W, aut: WeightedPAutomaton[N, D, W]): Unit = {
       if (t.getLabel == rule.getL1 || rule.getL1.isInstanceOf[Wildcard]) {
         if (rule.getCallSite.isInstanceOf[Wildcard]) {
-          if (t.getLabel == fa.epsilon) return
+          if (t.getLabel == fa.epsilon()) return
         }
         val p = rule.getS2
         val gammaPrime = rule.getL2
@@ -232,11 +180,10 @@ abstract class PostStar[N <: Location, D <: State, W <: Weight] {
           val summary = getOrCreateSummaryAutomaton(irState, calleeTransition, fa.getOne, aut)
           summary.registerListener(new WPAUpdateListener[N, D, W] {
             override def onWeightAdded(t: Transition[N, D], w: W, innerAut: WeightedPAutomaton[N, D, W]): Unit = {
-              if (t.getLabel == fa.epsilon && t.getTarget == irState) {
-                update(t, w.asInstanceOf[W])
+              if (t.getLabel == fa.epsilon() && t.getTarget == irState) {
+                update(t, w)
                 val newWeight = getWeightFor(callSiteTransition)
-                update(new Transition(t.getStart, callSiteTransition.getLabel, callSiteTransition.getTarget),
-                  newWeight.extendWith(w).asInstanceOf[W])
+                update(new Transition(t.getStart, callSiteTransition.getLabel, callSiteTransition.getTarget), newWeight.extendWith(w))
               }
             }
           })
@@ -253,18 +200,11 @@ abstract class PostStar[N <: Location, D <: State, W <: Weight] {
       result
     }
 
-    override def equals(obj: Any): Boolean = {
-      obj match {
-        case other: HandlePushListener =>
-          if (this == other) return true
-          if (!super.equals(other)) return false
-          if (getClass != other.getClass) return false
-          if (rule == null) {
-            if (other.rule != null) return false
-          } else if (!rule.equals(other.rule)) return false
-          true
-        case _ => false
-      }
+    override def equals(obj: Any): Boolean = obj match {
+      case other: HandlePushListener =>
+        (this eq other) || (other != null && getClass == other.getClass &&
+          rule == other.rule)
+      case _ => false
     }
   }
 

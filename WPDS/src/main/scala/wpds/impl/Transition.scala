@@ -10,7 +10,7 @@ class Transition[N <: Location, D <: State](val s1: D, val l1: N, val s2: D) ext
     require(l1 != null)
     if (l1.isInstanceOf[Wildcard]) throw new RuntimeException("No wildcards allowed!")
 
-    private var hashValue: Int = _
+    private var hashCode: Int = _
 
     def getStartConfig: Configuration[N, D] = new Configuration[N, D](l1, s1)
 
@@ -19,15 +19,15 @@ class Transition[N <: Location, D <: State](val s1: D, val l1: N, val s2: D) ext
     def getStart: D = s1
 
     override def hashCode(): Int = {
-        if (hashValue != 0) hashValue
+        if (hashCode != 0) hashCode
         else {
             val prime = 31
             var result = 1
             result = prime * result + (if (l1 == null) 0 else l1.hashCode())
             result = prime * result + (if (s1 == null) 0 else s1.hashCode())
             result = prime * result + (if (s2 == null) 0 else s2.hashCode())
-            hashValue = result
-            hashValue
+            hashCode = result
+            hashCode
         }
     }
 
