@@ -2,15 +2,17 @@ package wpds.impl
 
 import scala.collection.mutable.Set
 import wpds.interfaces.{Location, State, WPAStateListener}
+import wpds.impl.Weight
 
 
-abstract class StackListener[N <: Location, D <: State, W <: Weight](val aut: WeightedPAutomaton[N, D, W], state: D, var source: N) 
-    extends WPAStateListener[N, D, W](state) {
+abstract class StackListener[N <: Location, D <: State, W <: Weight](weightedPAutomaton: WeightedPAutomaton[N, D, W], state: D, val source: N) 
+  extends WPAStateListener[N, D, W](state) {
 
+    private val aut: WeightedPAutomaton[N, D, W] = weightedPAutomaton
     private val notifiedStacks: Set[N] = Set()
 
     override def onOutTransitionAdded(t: Transition[N, D], w: W, weightedPAutomaton: WeightedPAutomaton[N, D, W]): Unit = {
-        if (t.getLabel == aut.epsilon()) return
+        if (t.getLabel == aut.epsilon) return
         if (this.aut.getInitialStates.contains(t.getTarget)) {
             if (t.getLabel == source) {
                 anyContext(source)
@@ -36,17 +38,17 @@ abstract class StackListener[N <: Location, D <: State, W <: Weight](val aut: We
     }
 
     override def equals(obj: Any): Boolean = obj match {
-        case other: StackListener[_, _, _] =>
+        case other: StackListener[N, D, W] =>
             (this eq other) || (other != null && getClass == other.getClass &&
                 source == other.source)
         case _ => false
     }
 
 
-    private class SubStackListener(state: D, parent: StackListener) extends WPAStateListener[N, D, W](state) {
+    private class SubStackListener(state: D, val parent: StackListener[N, D, W]) extends WPAStateListener[N, D, W](state) {
 
         override def onOutTransitionAdded(t: Transition[N, D], w: W, weightedPAutomaton: WeightedPAutomaton[N, D, W]): Unit = {
-            if (t.getLabel == aut.epsilon()) return
+            if (t.getLabel == aut.epsilon) return
             stackElement(t.getLabel)
             if (aut.isGeneratedState(t.getTarget) && t.getTarget != t.getStart) {
                 aut.registerListener(new SubStackListener(t.getTarget, parent))

@@ -1,40 +1,28 @@
 package wpds.impl
 
 import wpds.interfaces.{Location, State}
+import wpds.impl.Weight
 
-abstract class Rule[N <: Location, D <: State, W <: Weight](var s1: D, var l1: N, var s2: D, var l2: N, var w: W) {
+class PushRule[N <: Location, D <: State, W <: Weight](s1: D, l1: N, s2: D, l2: N, callSite: N, w: W) extends Rule[N, D, W](s1, l1, s2, l2, w) {
 
-    def getStartConfig: Configuration[N, D] = new Configuration[N, D](l1, s1)
+    protected var _callSite: N = callSite
 
-    def getTargetConfig: Configuration[N, D] = new Configuration[N, D](l2, s2)
+    def getCallSite: N = _callSite
 
-    def getL1: N = l1
-
-    def getL2: N = l2
-
-    def getS1: D = s1
-
-    def getS2: D = s2
-
-    def setS1(s1: D): Unit = this.s1 = s1
-
-    def getWeight: W = w
-
-    override def hashCode(): Int = {
+    override def hashCode: Int = {
         val prime = 31
-        var result = 1
-        result = prime * result + (if (l1 == null) 0 else l1.hashCode())
-        result = prime * result + (if (l2 == null) 0 else l2.hashCode())
-        result = prime * result + (if (s1 == null) 0 else s1.hashCode())
-        result = prime * result + (if (s2 == null) 0 else s2.hashCode())
-        result = prime * result + (if (w == null) 0 else w.hashCode())
+        var result = super.hashCode
+        result = prime * result + (if (_callSite == null) 0 else _callSite.hashCode)
         result
     }
 
     override def equals(obj: Any): Boolean = obj match {
-        case other: Rule[_, _, _] =>
-            (this eq other) || (other != null && getClass == other.getClass &&
-                l1 == other.l1 && l2 == other.l2 && s1 == other.s1 && s2 == other.s2 && w == other.w)
+        case that: PushRule[N, D, W] =>
+            (this eq that) || (that canEqual this) && (super.equals(that)) && (_callSite == null && that._callSite == null || _callSite != null && _callSite == that._callSite)
         case _ => false
     }
+
+    def canEqual(other: Any): Boolean = other.isInstanceOf[PushRule[N, D, W]]
+
+    override def toString: String = "<" + s1 + ";" + l1 + ">-><" + s2 + ";" + l2 + "." + _callSite + ">(" + w + ")"
 }

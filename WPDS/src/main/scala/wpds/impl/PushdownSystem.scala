@@ -13,13 +13,13 @@ package wpds.impl
 
 import wpds.interfaces.{Location, State}
 
-class PushdownSystem[N <: Location, D <: State] 
-  extends WeightedPushdownSystem[N, D, NoWeight] {
+class PushdownSystem[N <: Location, D <: State] extends WeightedPushdownSystem[N, D, Weight.NoWeight] {
 
-  override def addRule(rule: Rule[N, D, NoWeight]): Boolean = {
+  override def addRule(rule: Rule[N, D, Weight.NoWeight]): Boolean = {
     rule match {
-      case _: UNormalRule[_, _] | _: UPopRule[_, _] | _: UPushRule[_, _, _] => super.addRule(rule)
+      case _: UNormalRule[N, D] | _: UPopRule[N, D] | _: UPushRule[N, D] =>
       case _ => throw new RuntimeException("Trying to add a weighted rule to an unweighted PDS!")
     }
+    super.addRule(rule)
   }
 }

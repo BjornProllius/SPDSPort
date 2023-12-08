@@ -7,13 +7,13 @@ abstract class Weight {
 }
 
 object Weight {
-    val NO_WEIGHT_ONE: Weight = new NoWeight
-}
+    val NO_WEIGHT_ONE: NoWeight = new NoWeight()
 
-class NoWeight extends Weight {
-    override def extendWith(other: Weight): Weight = other
+    class NoWeight extends Weight {
+        override def extendWith(other: Weight): Weight = other
 
-    override def combineWith(other: Weight): Weight = other
+        override def combineWith(other: Weight): Weight = other
 
-    override def toString: String = ""
+        override def toString: String = ""
+    }
 }
