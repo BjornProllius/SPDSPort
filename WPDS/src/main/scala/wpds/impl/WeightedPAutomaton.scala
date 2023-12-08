@@ -463,7 +463,7 @@ def addWeightForTransition(trans: Transition[N, D], weight: W): Boolean = {
         def addedSummary(t: Transition[N, D]): Unit
     }
 
-    class UnbalancedPopEntry(val targetState: D, trans: Transition[N, D]) {
+    class UnbalancedPopEntry(val targetState: D, val trans: Transition[N, D]) {
 
         override def hashCode(): Int = {
             val prime = 31
