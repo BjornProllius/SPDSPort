@@ -49,9 +49,9 @@ class WeightedPushdownSystem[N <: Location, D <: State, W <: Weight] extends IPu
 
     override def getRulesStarting(start: D, string: N): Set[Rule[N, D, W]] = {
         val result = HashSet[Rule[N, D, W]]()
-        getRulesStartingWithinSet(start, string, popRules.toSet, result)
-        getRulesStartingWithinSet(start, string, normalRules.toSet, result)
-        getRulesStartingWithinSet(start, string, pushRules.toSet, result)
+        getRulesStartingWithinSet(start, string, popRules, result)
+        getRulesStartingWithinSet(start, string, normalRules, result)
+        getRulesStartingWithinSet(start, string, pushRules, result)
         result.toSet
     }
 
