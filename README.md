@@ -1,6 +1,6 @@
 # SPDSPort
 SPDS
-This repository contains a Java implementation of Synchronized Pushdown Systems. Additionally, it contains an implementation of Boomerang and IDEal based on a Weighted Pushdown System.
+This repository contains a Scala implementation of Synchronized Pushdown Systems, which has been translated from the original project which is hosted at: https://github.com/CodeShield-Security/SPDS
 
 Use as Maven dependency
 All projects inside this repository are pushed to GitHub's Maven repository for every release.
