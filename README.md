@@ -2,8 +2,7 @@
 
 # SPDS
 
-This repository contains a Java implementation of Synchronized Pushdown Systems.
-Additionally, it contains an implementation of [Boomerang](boomerangPDS) and [IDEal](idealPDS) based on a Weighted Pushdown System.
+This repository contains a Scala implementation of Synchronized Pushdown Systems, which has been translated from the original project.
 
 # Use as Maven dependency
 
