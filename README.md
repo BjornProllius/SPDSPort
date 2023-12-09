@@ -2,7 +2,7 @@
 
 # SPDS
 
-This repository contains a Scala implementation of Synchronized Pushdown Systems, which has been translated from the original project.
+This repository contains a Scala implementation of Synchronized Pushdown Systems, which has been translated from the original project which is hosted at: https://github.com/CodeShield-Security/SPDS
 
 # Use as Maven dependency
 
